@@ -18,6 +18,7 @@ import CustomText from '@components/global/CustomText';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { tokenStorage } from '@state/storage';
 import { useAuthStore } from '@state/authStore';
+import { shadowStyle } from '@styles/GlobalStyles';
 
 interface ExtendedOtpInputProps extends OtpInputProps {
   pinCodeContainerStyle?: object; // Add missing property
@@ -93,12 +94,14 @@ const OtpVerify = () => {
 
   return (
     <Container fullScreen={true} statusBarBackgroundColor='transparent' statusBarStyle='dark-content'>
-      <ImageBackground alt='loginBg' source={require('@assets/images/loginBg.png')} style={[styles.topBgContainer, { paddingTop: moderateScaleVertical(20) }]} resizeMode='cover'>
+      {/* <ImageBackground alt='loginBg' source={require('@assets/images/loginBg.png')} style={[styles.topBgContainer, { paddingTop: moderateScaleVertical(20) }]} resizeMode='cover'> */}
+       
+       <View style={[styles.topBgContainer, { paddingTop: moderateScaleVertical(20) }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}  >
           <LessIcon />
         </Pressable>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: moderateScaleVertical(10), gap: moderateScaleVertical(10) }}>
-          <Image alt='loginLogo' source={require('@assets/icons/loginLogo.png')} resizeMode='contain' style={{ width: moderateScale(120), height: moderateScale(120) }} />
+          <Image alt='loginLogo' source={require('@assets/icons/loginLogo.png')} resizeMode='contain' style={{ width: moderateScale(90), height: moderateScale(90) }} />
           <CustomText variant='h3' style={{ textAlign: 'center', width: moderateScale(250) }} fontFamily={Fonts.SemiBold} numberOfLine={2} >Please verify your mobile number</CustomText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: moderateScale(10) }}>
             <CustomText variant='h7' style={{ textAlign: 'center', width: moderateScale(300), color: Colors.grayish }} fontFamily={Fonts.Regular} numberOfLine={2} >Please enter {otp} the 4-digit code sent to your mobile number
@@ -109,13 +112,15 @@ const OtpVerify = () => {
             </Pressable>
           </View>
         </View>
-      </ImageBackground>
+       </View>
+
+      {/* </ImageBackground> */}
 
       <View style={{ marginHorizontal: moderateScale(25), marginBottom: moderateScaleVertical(20) }} >
         <OtpInput
           numberOfDigits={4}
           onTextChange={(text) => setOtpInput(text)}
-          focusColor={Colors.deepLavende}
+          focusColor={Colors.primary2}
           focusStickBlinkingDuration={400}
           theme={{
             pinCodeContainerStyle: {
@@ -147,7 +152,7 @@ const OtpVerify = () => {
           />
         </View>
       </View>) : (<Pressable onPress={onOTPResend}>
-        {useOtpResendMutation?.isPending ? (<ActivityIndicator color={Colors.Purple} size={'small'} />) : (<CustomText variant='h7' style={{ textAlign: 'center', color: Colors.Purple }} fontFamily={Fonts.SemiBold} numberOfLine={1} >Resend OTP</CustomText>)}
+        {useOtpResendMutation?.isPending ? (<ActivityIndicator color={Colors.Purple} size={'small'} />) : (<CustomText variant='h7' style={{ textAlign: 'center', color: Colors.primary2 }} fontFamily={Fonts.SemiBold} numberOfLine={1} >Resend OTP</CustomText>)}
       </Pressable>)}
 
 
@@ -171,7 +176,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: moderateScale(20),
-    marginTop: moderateScaleVertical(50)
+    marginLeft: moderateScale(15),
+    marginTop: moderateScaleVertical(50),
+    ...shadowStyle
   }
 })

@@ -55,18 +55,22 @@ const Login = () => {
   return (
     <Container fullScreen={true} statusBarBackgroundColor='transparent' statusBarStyle='dark-content'>
       <Body contentContainerStyle={{}} >
-        <ImageBackground alt='loginBg' source={require('@assets/images/loginBg.png')} style={{ width: '100%', justifyContent: 'center', paddingTop: moderateScaleVertical(insets.top + 40) }} resizeMode='cover'>
-          <View style={{ alignItems: 'center', justifyContent: 'center', gap: moderateScaleVertical(5) }}>
-            <Image source={require('@assets/icons/loginLogo.png')} resizeMode='contain' style={{ width: moderateScale(120), height: moderateScale(120) }} />
-            <CustomText fontSize={RFValue(16)} fontFamily={Fonts.SemiBold} numberOfLine={2} style={{ textAlign: 'center' }} >Enter your mobile number</CustomText>
-            <CustomText variant='h6' fontFamily={Fonts.Regular} numberOfLine={1} style={{ textAlign: 'center'}} >We will send you a verification code</CustomText>
-          </View>
-        </ImageBackground>
+        {/* <ImageBackground alt='loginBg' source={require('@assets/images/loginBg.png')} style={{ width: '100%', justifyContent: 'center', paddingTop: moderateScaleVertical(insets.top + 40) }} resizeMode='cover'> */}
+        
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', height: moderateScale(70), overflow: 'hidden', marginVertical: moderateScaleVertical(20),width:'100%',justifyContent:'center' }} >
+
+        {/* </ImageBackground> */}
+        <View style={{ width: '100%', justifyContent: 'center', paddingTop: moderateScaleVertical(insets.top + 40) }}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', gap: moderateScaleVertical(5) }}>
+            <Image source={require('@assets/icons/loginLogo.png')} resizeMode='contain' style={{ width: moderateScale(90), height: moderateScale(90),marginBottom:moderateScaleVertical(40) }} />
+            <CustomText fontSize={RFValue(16)} fontFamily={Fonts.SemiBold} numberOfLine={2} style={{ textAlign: 'center' }} >Enter your mobile number</CustomText>
+            <CustomText variant='h6' fontFamily={Fonts.Regular} numberOfLine={1} style={{ textAlign: 'center' }} >We will send you a verification code</CustomText>
+          </View>
+        </View>
+        {/* <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', height: moderateScale(70), overflow: 'hidden', marginVertical: moderateScaleVertical(20),width:'100%',justifyContent:'center' }} >
           <CustomText fontSize={RFValue(14)} fontFamily={Fonts.Medium} numberOfLine={1} >+91</CustomText>
           <View style={styles.divider} />
-          {/* <View style={{ backgroundColor: Colors.white, borderRadius: moderateScale(8), overflow: 'hidden', paddingLeft: moderateScale(5), flex: 1, height: moderateScale(70) }} > */}
+          <View style={{ backgroundColor: Colors.white, borderRadius: moderateScale(8), overflow: 'hidden', paddingLeft: moderateScale(5), flex: 1, height: moderateScale(70) }} >
           <TextInput
             placeholder='(000) 000-00-00'
             value={mobile}
@@ -76,8 +80,21 @@ const Login = () => {
             keyboardType='number-pad'
             style={{ color: Colors.black, fontSize: RFValue(18), fontFamily: Fonts.Medium,width:'40%',alignSelf:'center' }}
           />
-          {/* </View> */}
+          </View>
+        </View> */}
+
+        <View style={{ marginVertical: moderateScaleVertical(15) }}>
+          <TextInput
+            placeholder='(000) 000-00-00'
+            value={mobile}
+            maxLength={10}
+            onChangeText={(t) => setMobile(t)}
+            placeholderTextColor={Colors.grayish}
+            keyboardType='number-pad'
+            style={{ color: Colors.black, fontSize: RFValue(16), fontFamily: Fonts.Medium, alignSelf: 'center' }}
+          />
         </View>
+
 
         <View style={{ backgroundColor: Colors.lavenderBlush, height: moderateScale(190), borderRadius: moderateScale(10), marginHorizontal: moderateScale(25) }} >
 
@@ -100,10 +117,10 @@ const Login = () => {
           </View>
         </View>
 
-        <PrimaryButton onPress={onLogin} disabled={useUserLoginMutation?.isPending} loading={useUserLoginMutation.isPending} buttonText='Continue' marginHorizontal={moderateScale(20)} borderRadius={moderateScale(10)} marginTop={moderateScaleVertical(30)}  />
+        <PrimaryButton onPress={onLogin} disabled={useUserLoginMutation?.isPending} loading={useUserLoginMutation.isPending} buttonText='Continue' marginHorizontal={moderateScale(20)} borderRadius={moderateScale(10)} marginTop={moderateScaleVertical(30)} />
 
         <CustomText variant='h7' fontFamily={Fonts.Medium} numberOfLine={2} style={{ color: Colors.grayish, textAlign: 'center', marginHorizontal: moderateScale(20), marginTop: moderateScaleVertical(30) }} >By clicking on “Continue” you are agreeing to our
-          <CustomText variant='h7' fontFamily={Fonts.SemiBold} numberOfLine={1} style={{ color: Colors.deepLavende }} > terms of use</CustomText>
+          <CustomText variant='h7' fontFamily={Fonts.SemiBold} numberOfLine={1} style={{ color: Colors.primary2 }} > terms of use</CustomText>
         </CustomText>
       </Body>
     </Container>

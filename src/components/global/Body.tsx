@@ -1,5 +1,7 @@
 
-import React, { useMemo } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { moderateScaleVertical } from "@utils/responsiveSize";
+import React, { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import {
   KeyboardAwareScrollView,
@@ -31,6 +33,7 @@ function Body(props: BodyProps) {
       keyboardShouldPersistTaps={"handled"}
       enableOnAndroid={false}
       showsVerticalScrollIndicator={false}
+      // extraScrollHeight={moderateScaleVertical(80)}
       {...props}
     />
   );

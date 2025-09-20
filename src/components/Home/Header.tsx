@@ -25,7 +25,7 @@ const Header: FC<{ showNotice: () => void }> = ({ showNotice }) => {
   const { data: profileData, isLoading: profileIsLoading } = useGetUserProfile({ userId: user?.userUniqueId })
 
   return (
-    <ImageBackground alt='topBg' source={require('@assets/images/topBg.png')} style={{ height: moderateScale(60) }} >
+    <View style={{ height: moderateScale(60),backgroundColor: '#F6F7F9' }} >
       <View style={{ flexDirection: 'row', marginTop: moderateScaleVertical(10) }}>
         <View style={{ gap: moderateScale(4), width: '60%', paddingLeft: moderateScale(20) }}>
           <CustomText variant='h8' fontFamily={Fonts.Medium} style={{ color: Colors.grayish }}>
@@ -88,7 +88,7 @@ const Header: FC<{ showNotice: () => void }> = ({ showNotice }) => {
           </Pressable>
         </View>
       </View>
-    </ImageBackground>
+    </View>
   )
 }
 

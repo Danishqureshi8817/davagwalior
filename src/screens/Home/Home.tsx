@@ -52,7 +52,7 @@ const Home = () => {
       position => {
         const { latitude, longitude } = position.coords
         console.log(latitude, longitude, 'location');
-        
+
         // refetchUser(setUser)
         reverseGeocode(latitude, longitude, setUser, user)
       },
@@ -69,11 +69,11 @@ const Home = () => {
     updateUserLocation()
   }, [])
 
-  console.log(user,'uuiu');
-  
+  console.log(user, 'uuiu');
+
 
   return (
-    <Container fullScreen={true} statusBarStyle='dark-content' >
+    <Container statusBarStyle='dark-content' statusBarBackgroundColor='#F6F7F9' >
       <Visuals />
       <Animated.View style={[styles.backToTopButton, backToTopStyle]} >
         <TouchableOpacity

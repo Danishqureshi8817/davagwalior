@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { resetAndNavigate } from '@utils/NavigationUtils'
 import { Container } from '@components/global/Container';
-import { Alert, Image, ImageBackground } from 'react-native';
+import { Alert, Image, ImageBackground, View } from 'react-native';
 import { moderateScale } from '@utils/responsiveSize';
-import { RoutesName } from '@utils/Constants';
+import { Colors, RoutesName } from '@utils/Constants';
 import { useAuthStore } from '@state/authStore';
 import GeoLocation from '@react-native-community/geolocation'
 import { jwtDecode } from 'jwt-decode'
@@ -34,7 +34,7 @@ const Splash = () => {
     if (accessToken) {
       const decodedAccessToken = jwtDecode<DecodedToken>(accessToken)
       const decodedRefreshToken = jwtDecode<DecodedToken>(refreshToken)
-  
+
       const currentTime = Date.now() / 1000; //unix eco formate
 
       if (decodedRefreshToken?.exp < currentTime) {
@@ -87,10 +87,15 @@ const Splash = () => {
   }, [])
 
   return (
-    <Container fullScreen={true} statusBarBackgroundColor='transparent'>
-      <ImageBackground alt='bgIcon' source={require('@assets/images/splashBG.png')} style={{ width:'100%', height:'100%', justifyContent:'center', alignItems:'center' }} >
-        <Image source={require('@assets/icons/splashLogo.png')} style={{width:moderateScale(235), height:moderateScale(140)}}/>
-      </ImageBackground>
+    <Container fullScreen={true} statusBarBackgroundColor='transparent' statusBarStyle='light-content'>
+      {/* <ImageBackground alt='bgIcon' source={require('@assets/images/splashBG.png')} style={{ width:'100%', height:'100%', justifyContent:'center', alignItems:'center' }} > */}
+      {/* </ImageBackground> */}
+
+      <View style={{ flex: 1, backgroundColor: Colors.primary, justifyContent: 'center', alignItems: 'center' }}>
+
+        <Image source={require('@assets/icons/splashLogo.png')} style={{ width: moderateScale(235), height: moderateScale(140) }} resizeMode='contain' />
+      </View>
+
     </Container>
   )
 }

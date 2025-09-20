@@ -88,7 +88,7 @@ const Address = () => {
         buttonText='Add New Address'
         borderRadius={moderateScale(10)}
         marginVertical={moderateScaleVertical(20)}
-        marginHorizontal={moderateScale(10)}
+        marginHorizontal={moderateScale(15)}
       />
       <CenterModalLoader loading={useDeleteUserAddressMutation.isPending} />
     </Container>

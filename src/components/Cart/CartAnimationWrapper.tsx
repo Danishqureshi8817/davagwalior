@@ -2,13 +2,14 @@ import { Animated, StyleSheet, Text, View } from 'react-native'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { hocStyle } from '@styles/GlobalStyles';
 import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface CartAnimationWrapperProps {
-  cartCount:number;
-  children:React.ReactNode;
+  cartCount: number;
+  children: React.ReactNode;
 }
 
-const CartAnimationWrapper:FC <CartAnimationWrapperProps> = ({cartCount,children}) => {
+const CartAnimationWrapper: FC<CartAnimationWrapperProps> = ({ cartCount, children }) => {
 
   const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -16,43 +17,46 @@ const CartAnimationWrapper:FC <CartAnimationWrapperProps> = ({cartCount,children
 
   useEffect(() => {
     if (cartCount > 0 && !hasAnimated) {
-      Animated.timing(slideAnim,{
-        toValue:1,
-        duration:300,
-        useNativeDriver:true
-      }).start(()=>{
+      Animated.timing(slideAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true
+      }).start(() => {
         setHasAnimated(true)
       });
-    }else if (cartCount === 0 && hasAnimated) {
-      Animated.timing(slideAnim,{
-        toValue:0,
-        duration:300,
-        useNativeDriver:true
-      }).start(()=>{
+    } else if (cartCount === 0 && hasAnimated) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true
+      }).start(() => {
         setHasAnimated(false)
       });
     }
-  
-  }, [cartCount,hasAnimated])
-  
+
+  }, [cartCount, hasAnimated])
+
 
   const slideUpStyle = {
-    transform : [
+    transform: [
       {
         translateY: slideAnim.interpolate({
-          inputRange:[0,1],
-          outputRange:[100,0]
+          inputRange: [0, 1],
+          outputRange: [100, 0]
         })
       }
     ],
-    opacity : slideAnim
+    opacity: slideAnim
   }
 
 
   return (
-    <Animated.View style={[hocStyle.cartConatiner,slideUpStyle]}>
-      {children}
-    </Animated.View>
+    <SafeAreaView edges={['bottom']}>
+      <Animated.View style={[hocStyle.cartConatiner, slideUpStyle]}>
+        {children}
+      </Animated.View>
+    </SafeAreaView>
+
   )
 }
 

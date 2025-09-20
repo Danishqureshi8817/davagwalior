@@ -29,6 +29,9 @@ const Profile = () => {
   // api
   const { data, isLoading } = useGetUserProfile({ userId: user?.userUniqueId })
 
+  console.log(data?.data?.result);
+  
+
   const onLogOut = () => {
     // setLoad(true);
     // setTimeout(() => setLoad(false), 1500);

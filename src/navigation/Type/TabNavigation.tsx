@@ -9,71 +9,68 @@ import LabTests from '@screens/LabTests/LabTests';
 import Profile from '@screens/Profile/Profile';
 import { Platform, Text, View } from 'react-native';
 import { moderateScale, moderateScaleVertical, textScale } from '@utils/responsiveSize';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TabNavigation: FC = () => {
   // init
   const Tab = createBottomTabNavigator();
+  const insets = useSafeAreaInsets();
 
   return (
+    // <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }} edges={['bottom']}>
     <Tab.Navigator screenOptions={{
       headerShown: false,
-      tabBarShowLabel: false,
+      // tabBarShowLabel: false,
       tabBarHideOnKeyboard: true,
       lazy: true,
       tabBarStyle: {
         backgroundColor: Colors.white,
-        paddingTop: Platform.OS === 'ios' ? moderateScaleVertical(10) : moderateScaleVertical(10)
+        height: Platform.OS === 'ios' ? moderateScaleVertical(80) : moderateScaleVertical(60),
+        // marginBottom: insets.bottom ? insets.bottom : 0,
+        // paddingTop: Platform.OS === 'ios' ? moderateScaleVertical(10) : moderateScaleVertical(10)
       },
+      // tabBarLabelStyle: {
+      //   position: 'absolute',
+      //   top: moderateScaleVertical(35)
+      // }
+
     }} >
       <Tab.Screen name={RoutesName.Home} component={Home}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center', gap: moderateScaleVertical(3), minWidth: moderateScale(60) }}>
-              {focused ? <HomeColorIcon /> : <HomeIcon />}
-              <Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, textAlign: 'center' }}  >Home</Text>
-            </View>
-          )
+          tabBarIcon: ({ focused }) => (<>{focused ? <HomeColorIcon /> : <HomeIcon />}</>),
+          tabBarLabel: ({ focused }) => (<Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', top: moderateScaleVertical(34) }} >Home</Text>)
         }}
       />
       <Tab.Screen name={RoutesName.Orders} component={Orders}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center', gap: moderateScaleVertical(3), minWidth: moderateScale(60) }}>
-              {focused ? <OrdersColorIcon /> : <OrdersIcon />}
-              <Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, textAlign: 'center' }}  >Orders</Text>
-            </View>
-          )
-        }} />
+          tabBarIcon: ({ focused }) => (<>{focused ? <OrdersColorIcon /> : <OrdersIcon />}</>),
+          tabBarLabel: ({ focused }) => (<Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', top: moderateScaleVertical(34) }}  >Orders</Text>),
+        }}
+      />
       <Tab.Screen name={RoutesName.PhoneCall} component={PhoneCall}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center', gap: moderateScaleVertical(3), minWidth: moderateScale(60) }}>
-              <View style={{ marginTop: moderateScaleVertical(-45) }}>
-                {focused ? <PhoneCallIcon /> : <PhoneCallIcon />}
-              </View>
-              <Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.black, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', bottom: 0, marginBottom: moderateScaleVertical(-9), textAlign: 'center' }}  >Phone</Text>
+            <View style={{ marginTop: moderateScaleVertical(-25) }}>
+              {focused ? <PhoneCallIcon /> : <PhoneCallIcon />}
             </View>
-          )
-        }} />
+          ),
+          tabBarLabel: ({ focused }) => (<Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', top: moderateScaleVertical(34) }}  >Phone</Text>),
+        }}
+      />
       <Tab.Screen name={RoutesName.LabsTests} component={LabTests}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center', gap: moderateScaleVertical(3), minWidth: moderateScale(60) }}>
-              {focused ? <LabTestSColorIcon /> : <LabTestsIcon />}
-              <Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, textAlign: 'center' }}  >Lab Tests</Text>
-            </View>
-          )
-        }} />
+          tabBarIcon: ({ focused }) => (<>{focused ? <LabTestSColorIcon /> : <LabTestsIcon />}</>),
+          tabBarLabel: ({ focused }) => (<Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', top: moderateScaleVertical(34) }}  >Lab Tests</Text>),
+        }}
+      />
       <Tab.Screen name={RoutesName.Profile} component={Profile}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center', gap: moderateScaleVertical(3), minWidth: moderateScale(60) }}>
-              {focused ? <ProfileColorIcon /> : <ProfileIcon />}
-              <Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, textAlign: 'center' }}  >Profile</Text>
-            </View>
-          )
-        }} />
+          tabBarIcon: ({ focused }) => (<>{focused ? <ProfileColorIcon /> : <ProfileIcon />}</>),
+          tabBarLabel: ({ focused }) => (<Text style={{ fontSize: textScale(10), color: focused ? Colors.deepPurple : Colors.grayish, fontFamily: focused ? Fonts.SemiBold : Fonts.Medium, position: 'absolute', top: moderateScaleVertical(34) }}  >Profile</Text>),
+        }}
+      />
     </Tab.Navigator>
+    // </SafeAreaView>
   )
 }
 

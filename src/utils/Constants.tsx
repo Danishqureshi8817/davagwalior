@@ -1,3 +1,9 @@
+import { Platform } from "react-native";
+
+export const isAndroid = Platform.OS === 'android';
+export const isModernAndroid = isAndroid && (Platform.Version as number) > 34; // API 30 = Android 11
+
+
 export enum Colors {
     whiteOpacity0 = 'rgba(255,255,255, 0)',
     whiteOpacity10 = 'rgba(255,255,255, 0.1)',
@@ -5,9 +11,9 @@ export enum Colors {
     black = '#000000',
     black2 = '#323232',
     black3 = '#05002D',
-    primary = '#30B0C5',
-    primary2 = '#1B8192',
-    primary3 = '#B7ECF5',
+    primary = '#411353',
+    primary2 = '#A64AC7',
+    primary3 = '#D739FB',
     success = '#80B644',
     gray = '#565353',
     gray2 = '#413F3F',
