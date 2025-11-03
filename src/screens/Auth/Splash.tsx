@@ -71,8 +71,8 @@ const Splash = () => {
   useEffect(() => {
     const initialStart = () => {
       try {
-        GeoLocation.requestAuthorization()
         ensureLocationEnabled()
+        GeoLocation.requestAuthorization()
         tokenCheck()
       } catch (error) {
         Alert.alert("Sorry we need location service to give you better shopping experience")

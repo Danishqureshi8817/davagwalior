@@ -88,8 +88,8 @@ android {
         applicationId "com.davagwalior"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 9
+        versionName "1.8"
     }
     signingConfigs {
         debug {
@@ -118,8 +118,11 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            ndk.debugSymbolLevel = 'FULL'
         }
     }
+
+    ndkVersion '28.0.12433566 rc1'
 }
 
 dependencies {

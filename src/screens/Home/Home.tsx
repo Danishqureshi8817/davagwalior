@@ -27,7 +27,6 @@ import { useAuthStore } from '@state/authStore'
 const Home = () => {
 
   // init
-  // init
   const { user, setUser } = useAuthStore()
   const insets = useSafeAreaInsets()
   const { scrollY, expand } = useCollapsibleContext()
