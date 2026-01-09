@@ -6,6 +6,7 @@ import { Colors, Fonts, RoutesName } from '@utils/Constants';
 import { BaseIMGURL } from '@services/config';
 import { FC } from 'react';
 import { navigate } from '@utils/NavigationUtils';
+import { useAuthStore } from '@state/authStore';
 
 interface ShopByCategoriesProps {
   data?: {
@@ -27,12 +28,16 @@ interface CategoryItem {
 
 const ShopByCategories : FC <ShopByCategoriesProps> = ({data}) => {
 
+  // init
+  const { settingData } = useAuthStore()
+
   const CategoryItems = ({ item }: { item: CategoryItem; index: number }) => {
     return (
       <TouchableOpacity
         onPress={() =>
           navigate(RoutesName.ProductListing, {
             selectedCat: item?.name,
+            mainCat: item?.name,
           })
         }
         activeOpacity={0.6}
@@ -42,7 +47,7 @@ const ShopByCategories : FC <ShopByCategoriesProps> = ({data}) => {
             {!!item?.image ? (
               <Image
                 alt="category"
-                source={{ uri: `${item?.image}` }}
+                source={{ uri: `${settingData?.s3Url}${item?.image}` }}
                 style={styles.image}
                 resizeMode="contain"
               />
@@ -87,6 +92,8 @@ const ShopByCategories : FC <ShopByCategoriesProps> = ({data}) => {
         columnWrapperStyle={styles.columnWrapper}
         numColumns={4}
         style={styles.flatList}
+        scrollEnabled={false}
+        nestedScrollEnabled={true}
       />
     </View>
   );
@@ -123,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: moderateScale(10),
     overflow: 'hidden',
+    backgroundColor: '#E9DEF4',
   },
   image: {
     width: '100%',

@@ -10,10 +10,14 @@ import { Colors, Fonts } from "@utils/Constants";
 import { moderateScale, moderateScaleVertical } from "@utils/responsiveSize";
 import CustomText from "@components/global/CustomText";
 import { DeleteCartItemIcon, MinusIcon, PlusIcon } from "@components/Icons";
+import { useAuthStore } from "@state/authStore";
 
 interface CartItemsProps {}
 
 const CartItems: FC<CartItemsProps> = ({}) => {
+
+  // init
+  const { settingData } = useAuthStore()
   const cartItems = useCartStore((state) => state?.cart);
    const { addItem, removeItem, deleteItem } = useCartStore();
 
@@ -27,18 +31,18 @@ const CartItems: FC<CartItemsProps> = ({}) => {
             <View style={styles.leftRow}>
               <View style={styles.imageWrapper}>
                 <Image
-                  source={require("@assets/images/product2.png")}
+                  source={{uri: `${settingData?.s3Url}${item?.item?.thumbnail}`}}
                   style={styles.image}
                   resizeMode="contain"
                 />
               </View>
 
               <View style={styles.detailsColumn}>
-                <CustomText fontFamily={Fonts.Medium} variant="h7" numberOfLine={1}>
-                  {item?.item?.name}
+                <CustomText fontFamily={Fonts.Medium} variant="h7" numberOfLine={1} style={styles.productName}>
+                  {item?.item?.DisplayName}shfhfsgfshafjhgsdfjsgdjfgsjfgs
                 </CustomText>
-                <CustomText style={styles.brandName} numberOfLine={1}>
-                  {item?.item?.comp}
+                <CustomText style={styles.brandName} fontFamily={Fonts.Medium} variant="h7" numberOfLine={1}>
+                  {item?.item?.brand}fhjkashfkdshkhskhfkhskffhsjkh
                 </CustomText>
 
                 <View style={styles.priceRow}>
@@ -47,7 +51,7 @@ const CartItems: FC<CartItemsProps> = ({}) => {
                     numberOfLine={1}
                   >
                     {"\u20B9"}
-                    {item?.item?.final || "43"}
+                    {item?.item?.sellPrice || "43"}
                   </CustomText>
 
                   <CustomText
@@ -55,7 +59,7 @@ const CartItems: FC<CartItemsProps> = ({}) => {
                     numberOfLine={1}
                   >
                     MRP {"\u20B9"}
-                    {item?.item?.price || "43"}
+                    {item?.item?.BuyPrice || "43"}
                   </CustomText>
                 </View>
               </View>
@@ -127,6 +131,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: moderateScale(15),
+    flex: 1,
+    paddingRight: moderateScale(0),
   },
   imageWrapper: {
     backgroundColor: Colors.white,
@@ -141,12 +147,15 @@ const styles = StyleSheet.create({
     height: moderateScale(64),
   },
   detailsColumn: {
-    gap: moderateScaleVertical(10),
+    gap: moderateScaleVertical(5),
+    flex: 1,
+    marginRight: moderateScale(5),
+  },
+  productName: {
+    color: Colors.black,
+    flexShrink: 1,
   },
   brandName: {
-    fontFamily: Fonts.Medium,
-    fontSize: 12,
-    lineHeight: 14,
     color: Colors.grayish,
   },
   priceRow: {
@@ -170,6 +179,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: moderateScaleVertical(25),
+    minWidth: moderateScale(60),
   },
   trashIcon: {
     alignSelf: "flex-end",

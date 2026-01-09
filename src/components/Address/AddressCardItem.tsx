@@ -16,10 +16,10 @@ interface ADDRESS_CARD_TYPE {
   Address: string;
   landmark: string;
   pincode: number;
-  cityId: number;
+  cityId: null;
   cityName: string;
   Country: string;
-  stateId: number;
+  stateId: null;
   stateName: string;
   createdAt: string;
 }

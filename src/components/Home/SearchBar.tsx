@@ -11,12 +11,12 @@ const SearchBar: FC = () => {
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.8} >
-      <Icon name="search" size={RFValue(20)} color={Colors.deepPurple} />
+      <Icon name="search" size={RFValue(20)} color={Colors.primary} />
 
       <CustomText variant='h6' fontFamily={Fonts.Medium} style={{ color: Colors.mutedPurple, paddingLeft: moderateScale(15) }} >Search</CustomText>
       <RollingBar customStyle={styles.textContainer} interval={3000} defaultStyle={false} >
-        <CustomText variant='h6' fontFamily={Fonts.Medium} style={{ color: Colors.deepPurple }} >"Medicines"</CustomText>
-        <CustomText variant='h6' fontFamily={Fonts.Medium} style={{ color: Colors.deepPurple }} >"Lab Tests"</CustomText>
+        <CustomText variant='h6' fontFamily={Fonts.Medium} style={{ color: Colors.primary }} >"Medicines"</CustomText>
+        <CustomText variant='h6' fontFamily={Fonts.Medium} style={{ color: Colors.primary }} >"Lab Tests"</CustomText>
       </RollingBar>
 
       {/* <View style={styles.divider} />

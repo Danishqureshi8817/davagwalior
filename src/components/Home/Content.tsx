@@ -8,14 +8,19 @@ import FavoriteCategories from './FavoriteCategories'
 import SubstitutesBox from './SubstitutesBox'
 import ShopByCategories from './ShopByCategories'
 import ProductsSlider from './ProductSlider'
+import Cart from '@screens/Cart/Cart'
+import { useCartStore } from '@state/cartStore'
 
 const Content: FC = () => {
+
+  const cartItems = useCartStore(state => state?.cart);
 
   // api
   const { data: homeData, isLoading: homeDataIsLoading } = useGetHomeData()
 
   return (
-    <View style={styles.container} >
+    <View style={[styles.container,{paddingBottom: cartItems?.length > 0 ? moderateScaleVertical(70) : 0}]} >
+      
       <FavoriteCategories data={homeData?.data?.masterCat} />
 
       <BannerSlider data={homeData?.data?.homeBanner?.homeBannerTop} />
@@ -32,15 +37,17 @@ const Content: FC = () => {
 
       <BannerSlider data={homeData?.data?.homeBanner?.homeBannerBottom} />
 
-      <View style={{ marginBottom: moderateScaleVertical(20) }} >
-        <ProductsSlider title={'Top Deals Products'} sliderBgType='blue' />
-      </View>
-
-      <View style={{ marginBottom: moderateScaleVertical(0) }} >
-        <ProductsSlider title={'Baby Care Products'} />
-      </View>
-
-      <ProductsSlider title={'Supplements'} sliderBgType='blue' />
+      {homeData?.data?.productsByCategory?.map((categoryData: any, index: number) => (
+        <View 
+          key={categoryData?.category || index} 
+          style={{ marginBottom: moderateScaleVertical(20) }} 
+        >
+          <ProductsSlider 
+            sliderBgType={index % 2 === 0 ? 'blue' : 'white'} 
+            productData={categoryData} 
+          />
+        </View>
+      ))}
 
 
     </View>

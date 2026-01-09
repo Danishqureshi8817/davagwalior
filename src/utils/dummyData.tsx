@@ -1,4 +1,5 @@
 export const imageData = [
+
     require('../assets/products/1.png'),
     require('../assets/products/2.png'),
     require('../assets/products/3.png'),
@@ -25,7 +26,7 @@ export const adData = [
     require('../assets/products/c5.jpg'),
 ]
 
-const productsList =
+export const productsList =
     [
         {
             id: 1,

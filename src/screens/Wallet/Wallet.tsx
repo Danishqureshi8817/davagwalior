@@ -33,6 +33,10 @@ const Wallet = () => {
   const { data, isLoading } = useGetWalletTransactions({ userId: user?.userUniqueId })
   const { data: profileData, isLoading: profileIsLoading } = useGetUserProfile({ userId: user?.userUniqueId })
 
+  // Flatten all pages data - only get first 4 for recent transactions
+  const allTransactions = data?.pages?.flatMap(page => page?.data?.result?.wallettxn || []) || []
+  const recentTransactions = allTransactions.slice(0, 4)
+
   const Header = () => (
     <View style={styles.headerContainer}>
       <ImageBackground
@@ -49,7 +53,7 @@ const Wallet = () => {
         </View>
 
         <View style={styles.walletInfo}>
-          <CustomText fontSize={RFValue(20)} fontFamily={Fonts.SemiBold} style={styles.walletBalance}>₹ {profileData?.data?.result?.wallet}</CustomText>
+          <CustomText fontSize={RFValue(20)} fontFamily={Fonts.SemiBold} style={styles.walletBalance}>₹ {profileData?.data?.result?.user?.wallet}</CustomText>
           <CustomText variant='h4' fontFamily={Fonts.Regular} style={styles.walletLabel}>Total Balance</CustomText>
         </View>
       </ImageBackground>
@@ -86,7 +90,7 @@ const Wallet = () => {
             </View>
           ) : (
             <View style={styles.transactionList}>
-              {data?.data?.result?.slice(0, 4)?.map((item: WALLET_CARD) => {
+              {recentTransactions.map((item: WALLET_CARD) => {
                 const date = new Date(item?.createdAt)
                 return (
                   <View key={item?.id?.toString()} style={styles.transactionCard}>
@@ -119,12 +123,13 @@ const Wallet = () => {
 
       
         </View>
-      </Body>
-      <PrimaryButton
+
+        <PrimaryButton
             buttonText="Add Balance"
             marginHorizontal={moderateScale(25)}
             marginVertical={moderateScaleVertical(20)}
           />
+      </Body>
     </Container>
   )
 }

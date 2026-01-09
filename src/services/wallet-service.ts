@@ -8,11 +8,11 @@ class WalletService {
     getWalletTransactions: 'getWalletTransactions',
   };
 
-  getWalletTransactions = async (data: {userId : number}): Promise<AxiosResponse<GET_WALLET_TRANSACTIONS>> => {
-    const { userId } = data
+  getWalletTransactions = async (data: {userId : number, pageParam?: number}): Promise<AxiosResponse<GET_WALLET_TRANSACTIONS>> => {
+    const { userId, pageParam = 1 } = data
 
     return fetcher({
-      url: `/wallet-Txn?userId=${userId}`,
+      url: `/wallet-Txn?userId=${userId}&page=${pageParam}&limit=10`,
       method: 'GET',
     });
   }

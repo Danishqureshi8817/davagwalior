@@ -3,13 +3,27 @@ import React, { FC } from 'react';
 import CustomText from '@components/global/CustomText';
 import { moderateScale, moderateScaleVertical } from '@utils/responsiveSize';
 import { Colors, Fonts } from '@utils/Constants';
+import { useCartStore } from '@state/cartStore';
+import { getCharge } from '@utils/helperFunctions';
+import { useAuthStore } from '@state/authStore';
 
 interface PaymentOptionsProps {
-  selectedPaymentOption: any;
-  onPaymentOptionPress: (category: any) => void;
+  selectedPaymentMethod: string;
+  onPaymentOptionPress: (method: string, charge: number) => void;
 }
 
-const PaymentOptions : FC <PaymentOptionsProps> = ({ selectedPaymentOption, onPaymentOptionPress,  }) => {
+const PaymentOptions : FC <PaymentOptionsProps> = ({ selectedPaymentMethod, onPaymentOptionPress }) => {
+  const { getTotalPrice } = useCartStore();
+  const { settingData } = useAuthStore();
+  const totalItemPrice = getTotalPrice();
+
+  // Calculate COD charge
+  let codCharge = 0;
+  if (settingData?.codCharges) {
+    const codCharges = JSON.parse(settingData?.codCharges);
+    codCharge = getCharge(totalItemPrice, codCharges);
+  }
+
   return (
     <View>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: moderateScale(20), marginVertical: moderateScaleVertical(20) }} >
@@ -17,8 +31,8 @@ const PaymentOptions : FC <PaymentOptionsProps> = ({ selectedPaymentOption, onPa
       </View>
 
       <View style={styles.container}>
-      {/* Surface Option */}
-      <Pressable onPress={() => onPaymentOptionPress(20)}>
+      {/* Online Option */}
+      {/* <Pressable onPress={() => onPaymentOptionPress('ONLINE', 0)}>
         <View style={styles.optionRow}>
           <View style={styles.optionLeft}>
             <View style={styles.outerCircle}>
@@ -27,23 +41,25 @@ const PaymentOptions : FC <PaymentOptionsProps> = ({ selectedPaymentOption, onPa
                   styles.innerCircle,
                   {
                     backgroundColor:
-                    !!selectedPaymentOption ? Colors.mutedPurple : Colors.white
+                    selectedPaymentMethod === 'ONLINE' ? Colors.mutedPurple : Colors.white
                   },
                 ]}
               />
             </View>
             <CustomText style={styles.optionText} numberOfLine={1}>
-            Cash on Delivery(COD)
+              Online
             </CustomText>
           </View>
-          {/* <CustomText style={styles.priceText} numberOfLine={1}>
-            {'\u20B9'} {'133'}
-          </CustomText> */}
+          {selectedPaymentMethod === 'ONLINE' && (
+            <CustomText style={styles.priceText} numberOfLine={1}>
+              Free
+            </CustomText>
+          )}
         </View>
-      </Pressable>
+      </Pressable> */}
 
-      {/* Express Option */}
-      <Pressable onPress={() => onPaymentOptionPress(0)}>
+      {/* COD Option */}
+      <Pressable onPress={() => onPaymentOptionPress('COD', codCharge)}>
         <View style={styles.optionRow}>
           <View style={styles.optionLeft}>
             <View style={styles.outerCircle}>
@@ -52,18 +68,20 @@ const PaymentOptions : FC <PaymentOptionsProps> = ({ selectedPaymentOption, onPa
                   styles.innerCircle,
                   {
                     backgroundColor:
-                    !(!!selectedPaymentOption) ? Colors.mutedPurple : Colors.white
+                    selectedPaymentMethod === 'COD' ? Colors.mutedPurple : Colors.white
                   },
                 ]}
               />
             </View>
             <CustomText style={styles.optionText} numberOfLine={1}>
-            Prepaid
+              Cash on Delivery (COD)
             </CustomText>
           </View>
-          {/* <CustomText style={styles.priceText} numberOfLine={1}>
-            {'\u20B9'} { '233'}
-          </CustomText> */}
+          {selectedPaymentMethod === 'COD' && codCharge > 0 && (
+            <CustomText style={styles.priceText} numberOfLine={1}>
+              {'\u20B9'} {codCharge.toFixed(2)}
+            </CustomText>
+          )}
         </View>
       </Pressable>
     </View>

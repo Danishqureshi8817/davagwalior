@@ -1,11 +1,12 @@
 import { BaseURL } from "@services/config";
+import { tokenStorage } from "@state/storage";
 import Axios, { AxiosRequestConfig } from "axios";
 
 // import { getAuthValue } from "../hooks/common/useAuthValue";
 
 export const fetcher = async (config: AxiosRequestConfig) => {
   const { url, method, data, headers } = config;
-//   const { access_token } = getAuthValue()
+  const access_token = tokenStorage.getString('accessToken') as string
 
 //   console.log('fetcher',access_token)
 
@@ -16,8 +17,7 @@ export const fetcher = async (config: AxiosRequestConfig) => {
     data,
     ...config,
     headers: {
-    //   Authorization: access_token ? `Bearer ${access_token}` : undefined,
-    Authorization:'',
+      Authorization: access_token ? `Bearer ${access_token}` : undefined,
       ...config?.headers,
       ...headers,
     },

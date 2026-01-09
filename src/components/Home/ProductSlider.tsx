@@ -1,55 +1,83 @@
 import { FlatList, View, StyleSheet, Image, ImageBackground, Pressable } from "react-native"
 import { moderateScale, moderateScaleVertical, textScale } from "../../utils/responsiveSize"
-import { Colors, Fonts } from "@utils/Constants"
+import { Colors, Fonts, RoutesName } from "@utils/Constants"
 import CustomText from "@components/global/CustomText"
 import { Greater19Icon } from "@components/Icons"
 import { shadowStyle } from "@styles/GlobalStyles"
 import UniversalAdd from "@components/ui/UniversalAdd"
 import { FC } from "react"
+import { useAuthStore } from "@state/authStore"
+import { calculateDiscount } from "@utils/helperFunctions"
+import { navigate } from "@utils/NavigationUtils"
 
 interface ProductsSliderProps {
-  title: string;
   sliderBgType?: string;
+  productData?: {
+    category: string;
+    products: {
+      sku: number;
+      DisplayName: string;
+      sellPrice: number;
+      BuyPrice: number;
+      thumbnail: string;
+      brand: string;
+      igst: number;
+      stock: boolean;
+    }[];
+  };
 }
 
-const ProductsSlider:FC <ProductsSliderProps> = ({title,sliderBgType}) => {
+const ProductsSlider:FC <ProductsSliderProps> = ({productData, sliderBgType}) => {
 
-  const productData = [
-    { id: '01', name: 'Ashwagandha', comp: 'KORESELECT', price: '400', final: '500', img: require('../../assets/images/product1.png') },
-    { id: '02', name: 'Shirashoolari', comp: 'SRI SRI', price: '400', final: '500', img: require('../../assets/images/product2.png') },
-    { id: '03', name: 'SMB Capsule', comp: 'NVEDA', price: '400', final: '500', img: require('../../assets/images/product3.png') },
-  ]
+  // init
+  const { settingData } = useAuthStore()
 
-  const ItemCard = ({ item }: { item: any, index: number }) => {
+  if (!productData || !productData?.products || productData?.products?.length === 0) {
+    return null
+  }
 
+  const ItemCard = ({ item, index }: { item: any, index: number }) => {
+
+    const discount = calculateDiscount(item?.sellPrice, item?.BuyPrice, 0)
 
     return (
-      <View style={[styles.card, shadowStyle]}>
+      <Pressable
+       onPress={() => navigate(RoutesName.ProductDetails, { productSku: item?.sku })}
+       style={[styles.card, shadowStyle]}>
         <View style={styles.imageContainer}>
-          <Image source={item?.img} style={styles.productImage} resizeMode="contain" />
-          <View style={styles.discountBadge}>
-            <CustomText fontFamily={Fonts.SemiBold} fontSize={textScale(5)} style={{ color: Colors.white }} numberOfLine={1}>12% OFF</CustomText>
-          </View>
+          {item?.thumbnail ? (
+            <Image 
+              source={{ uri: `${settingData?.s3Url}${item?.thumbnail}` }} 
+              style={styles.productImage} 
+              resizeMode="contain" 
+            />
+          ) : null}
+          {discount && parseFloat(discount) > 0 && (
+            <View style={styles.discountBadge}>
+              <CustomText fontFamily={Fonts.SemiBold} fontSize={textScale(5)} style={{ color: Colors.white }} numberOfLine={1}>{discount}% OFF</CustomText>
+            </View>
+          )}
         </View>
 
         <View style={styles.cardDetails}>
-          <CustomText fontFamily={Fonts.Medium} variant="h9" style={{ color: Colors.grayish }} numberOfLine={1}>{item?.comp}</CustomText>
-          <CustomText fontFamily={Fonts.SemiBold} variant="h9" style={styles.productName} numberOfLine={2}>{item?.name}</CustomText>
+          <CustomText fontFamily={Fonts.Medium} variant="h9" style={{ color: Colors.grayish }} numberOfLine={1}>{item?.brand}</CustomText>
+          <CustomText fontFamily={Fonts.SemiBold} variant="h9" style={styles.productName} numberOfLine={2}>{item?.DisplayName}</CustomText>
           <View style={styles.priceRow}>
-            <CustomText fontFamily={Fonts.SemiBold} variant="h9" style={{ color: Colors.black }}>{'₹'}{item?.price}</CustomText>
-            <CustomText fontFamily={Fonts.Medium} variant="h9" style={{ color: Colors.mutedPurple }}>MRP {'₹'}{item?.final}</CustomText>
+            <CustomText fontFamily={Fonts.SemiBold} variant="h9" style={{ color: Colors.black,maxWidth: '50%' }} numberOfLine={1}>{'₹'}{item?.sellPrice}</CustomText>
+            {item?.BuyPrice && (
+              <CustomText fontFamily={Fonts.Medium} variant="h9" style={{ color: Colors.mutedPurple, textDecorationLine: 'line-through',maxWidth: '50%' }} numberOfLine={1}>MRP {'₹'}{item?.BuyPrice}</CustomText>
+            )}
           </View>
         </View>
         <UniversalAdd item={item} />
-        {/* <PrimaryButton buttonText={isPresentItem ? 'Go to Cart' : addedText} onPress={addItemCart} height={moderateScale(25)} fontSize={RFValue(8)} borderRadius={moderateScale(4)} marginTop={moderateScaleVertical(10)} /> */}
-      </View>
+      </Pressable>
     )
   }
 
   return (
     <ImageBackground alt="productBg" source={sliderBgType === 'blue' ? require('@assets/images/productSliderBg.png') : require('@assets/images/productSliderBg2.png')} style={styles.sliderBackground}>
       <View style={styles.header}>
-        <CustomText fontFamily={Fonts.SemiBold} variant="h6" numberOfLine={1}>{title}</CustomText>
+        <CustomText fontFamily={Fonts.SemiBold} variant="h6" numberOfLine={1}>{productData?.category}</CustomText>
         <Pressable style={styles.viewAllContainer}>
           <CustomText fontFamily={Fonts.SemiBold} variant="h7" style={{ color: Colors.grayish }} numberOfLine={1}>View All</CustomText>
           <Greater19Icon />
@@ -57,9 +85,9 @@ const ProductsSlider:FC <ProductsSliderProps> = ({title,sliderBgType}) => {
       </View>
 
       <FlatList
-        data={productData}
+        data={productData?.products}
         renderItem={({ item, index }) => <ItemCard item={item} index={index} />}
-        keyExtractor={(item) => item?.id}
+        keyExtractor={(item, index) => item?.sku?.toString() || index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 10, paddingLeft: moderateScale(20) }}
@@ -89,12 +117,12 @@ const styles = StyleSheet.create({
     width: moderateScale(140),
     height: moderateScale(245),
     borderRadius: moderateScale(8),
-    paddingHorizontal: moderateScale(15),
+    paddingHorizontal: moderateScale(10),
     overflow: 'hidden',
   },
   imageContainer: {
     backgroundColor: Colors.paleGray,
-    width: moderateScale(114),
+    width: '100%',
     height: moderateScale(104),
     borderRadius: moderateScale(6),
     marginTop: moderateScaleVertical(10),
@@ -121,11 +149,11 @@ const styles = StyleSheet.create({
   },
   cardDetails: {
     marginTop: moderateScaleVertical(10),
-    gap: moderateScaleVertical(3)
+    // gap: moderateScaleVertical(3)
   },
   productName: {
     color: Colors.grayish,
-    height: moderateScale(25)
+    height: moderateScale(30)
   },
   priceRow: {
     flexDirection: 'row',

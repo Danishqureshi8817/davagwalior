@@ -2,7 +2,7 @@ import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'r
 import { moderateScale, moderateScaleVertical } from '../../utils/responsiveSize'
 import { Container } from '@components/global/Container';
 import { AppBar } from '@components/global/AppBar';
-import { Colors, RoutesName } from '@utils/Constants';
+import { Colors, Fonts, RoutesName } from '@utils/Constants';
 import PrimaryButton from '@components/ui/PrimaryButton';
 import { navigate } from '@utils/NavigationUtils';
 import { queryClient } from '@utils/react-query-config';
@@ -12,6 +12,7 @@ import useGetUserAddresses from '@hooks/address/get-user-addresses';
 import useDeleteUserAddress from '@hooks/address/delete-user-address';
 import { useAuthStore } from '@state/authStore';
 import AddressCardItem from '@components/Address/AddressCardItem';
+import CustomText from '@components/global/CustomText';
 
 interface ADDRESS_CARD_TYPE {
   id: number;
@@ -21,10 +22,10 @@ interface ADDRESS_CARD_TYPE {
   Address: string;
   landmark: string;
   pincode: number;
-  cityId: number;
+  cityId: null;
   cityName: string;
   Country: string;
-  stateId: number;
+  stateId: null;
   stateName: string;
   createdAt: string;
 }
@@ -35,8 +36,11 @@ const Address = () => {
   const { user, setUser } = useAuthStore()
 
   // apis
-  const { data, isLoading, refetch, isRefetching } = useGetUserAddresses({ userId: user?.userUniqueId })
+  const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetUserAddresses({ userId: user?.userUniqueId })
   const useDeleteUserAddressMutation = useDeleteUserAddress()
+
+  // Flatten all pages data
+  const allAddresses = data?.pages?.flatMap(page => page?.data?.result?.userAddresses || []) || []
 
   const onHandleDeleteAddress = (id: number) => {
     if (user?.saveAddressLocal?.id === id) {
@@ -54,22 +58,18 @@ const Address = () => {
     })
   }
 
-  if (isLoading) {
-    return (
-      <Container statusBarBackgroundColor={Colors.paleGray} statusBarStyle='dark-content'>
-        <AppBar back title='Address Listing' />
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size={'large'} color={Colors.Purple} />
-        </View>
-      </Container>
-    )
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
   }
 
+  console.log(data?.pages,'kldsdf');
   return (
     <Container statusBarBackgroundColor={Colors.paleGray} statusBarStyle='dark-content'>
-      <AppBar back title={'Address Listing'} />
+      <AppBar back title={'Address'} />
       <FlatList
-        data={data?.data?.result as ADDRESS_CARD_TYPE[] ?? []}
+        data={allAddresses}
         renderItem={({ item }: { item: ADDRESS_CARD_TYPE }) => (
           <AddressCardItem item={item} onDeleteAddress={(id) => onHandleDeleteAddress(id)} />
         )}
@@ -81,6 +81,32 @@ const Address = () => {
           tintColor={Colors.Purple}
 
         />}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          if (isFetchingNextPage) {
+            return (
+              <View style={{ height: moderateScale(50), justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.Purple} />
+              </View>
+            )
+          }
+          return null
+        }}
+        ListEmptyComponent={() => {
+          if (isLoading) {
+            return (
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator size={'large'} color={Colors.Purple} />
+              </View>
+            )
+          }
+          return (
+            <View style={styles.emptyContainer}>
+              <CustomText variant="h6" fontFamily={Fonts.Medium} numberOfLine={1} style={{  }}>No Addresses Found</CustomText>
+            </View>
+          )
+        }}
         contentContainerStyle={styles.flatListContainer}
       />
       <PrimaryButton
@@ -152,6 +178,12 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(10),
     gap: moderateScaleVertical(20),
     marginTop: moderateScaleVertical(10),
-    paddingBottom: moderateScaleVertical(20)
+    paddingBottom: moderateScaleVertical(20),
+    flexGrow: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

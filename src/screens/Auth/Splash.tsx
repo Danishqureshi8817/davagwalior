@@ -10,6 +10,8 @@ import { jwtDecode } from 'jwt-decode'
 import { tokenStorage } from '@state/storage';
 import { useToast } from '@masumdev/rn-toast';
 import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
+import useGetSettings from '@hooks/auth/get-settings';
+import useRefreshToken from '@hooks/auth/refresh-token';
 
 GeoLocation.setRNConfiguration({
   skipPermissionRequests: false,
@@ -27,34 +29,71 @@ const Splash = () => {
   const { user, setUser } = useAuthStore()
   const { showToast } = useToast();
 
+  // api
+  const useGetSettingsQuery = useGetSettings()
+  const refreshTokenMutation = useRefreshToken()
+
   const tokenCheck = async () => {
     const accessToken = tokenStorage.getString('accessToken') as string
     const refreshToken = tokenStorage.getString('refreshToken') as string
 
-    if (accessToken) {
-      const decodedAccessToken = jwtDecode<DecodedToken>(accessToken)
-      const decodedRefreshToken = jwtDecode<DecodedToken>(refreshToken)
+    console.log(accessToken,'accessToken');
+    if (accessToken && refreshToken) {
+      try {
+        const decodedAccessToken = jwtDecode<DecodedToken>(accessToken)
+        const decodedRefreshToken = jwtDecode<DecodedToken>(refreshToken)
 
-      const currentTime = Date.now() / 1000; //unix eco formate
+        const currentTime = Date.now() / 1000; //unix eco formate
 
-      if (decodedRefreshToken?.exp < currentTime) {
+        if (decodedRefreshToken?.exp < currentTime) {
+          resetAndNavigate(RoutesName.Login)
+          showToast(`Session Expired, Please login again`, 'error');
+          return false
+        }
+
+        if (decodedAccessToken?.exp < currentTime) {
+          console.log('accessToken expired, refreshing token...');
+          
+          // Call refresh token API with refresh token
+          refreshTokenMutation.mutate({ refreshToken }, {
+            onSuccess: (data) => {
+              if (data?.data?.success && data?.data?.result) {
+                // Store new tokens
+                tokenStorage.set("accessToken", data?.data?.result?.token)
+                tokenStorage.set("refreshToken", data?.data?.result?.refreshToken)
+
+                // Update user data if available
+                if (data?.data?.result?.user) {
+                  const { setUser } = useAuthStore.getState()
+                  setUser({
+                    expirationTime: data?.data?.result?.expirationTime,
+                    userUniqueId: data?.data?.result?.user?.userUniqueId,
+                    userMobile: data?.data?.result?.user?.mobile
+                  })
+                }
+
+                resetAndNavigate(RoutesName?.TabNavigation)
+              } else {
+                resetAndNavigate(RoutesName.Login)
+                showToast(`Session Expired, Please login again`, 'error');
+              }
+            },
+            onError: (error) => {
+              console.log('Error refreshing token:', error);
+              resetAndNavigate(RoutesName.Login)
+              showToast(`Session Expired, Please login again`, 'error');
+            }
+          })
+          return false // Don't navigate yet, wait for refresh token response
+        }
+        
+        resetAndNavigate(RoutesName?.TabNavigation)
+        return true
+      } catch (error) {
+        console.log('Error in token check:', error);
         resetAndNavigate(RoutesName.Login)
-        showToast(`Session Expired, Please login again`, 'error');
         return false
       }
-
-      if (decodedAccessToken?.exp < currentTime) {
-        // try {
-        //   refresh_tokens()
-        //   await refetchUser(setUser)
-        // } catch (error) {
-        //   console.log(error);
-        //   Alert.alert('There was an error refreshing token!')
-        //   return false
-        // }
-      }
-      resetAndNavigate(RoutesName?.TabNavigation)
-      return true
     }
 
     resetAndNavigate(RoutesName.Login)
@@ -67,6 +106,13 @@ const Splash = () => {
       await promptForEnableLocationIfNeeded();
     }
   };
+
+  useEffect(() => {
+    if (useGetSettingsQuery?.data?.data?.success) {
+      const { setSettingData } = useAuthStore.getState()
+      setSettingData(useGetSettingsQuery?.data?.data?.result?.setting)
+    }
+  }, [useGetSettingsQuery?.data])
 
   useEffect(() => {
     const initialStart = () => {

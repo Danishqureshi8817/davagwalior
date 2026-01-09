@@ -64,6 +64,7 @@ export interface GET_ORDERS {
   success: boolean;
   message: string;
   result: {
+    orders: {
     id: number;
     orderId: number;
     storeId: string;
@@ -79,7 +80,7 @@ export interface GET_ORDERS {
     returnRecieveAt: null;
     cancelAt: null;
     createdAt: string;
-    updatedAt: null | string;
+    updatedAt: null;
     userName: string;
     userMobile: string;
     isPaid: boolean;
@@ -87,7 +88,7 @@ export interface GET_ORDERS {
     paidBy: string;
     paymentMod: string;
     subTotal: number;
-    couponCode: string;
+    couponCode: null;
     coupondiscount: number;
     total: number;
     orderAmount: number;
@@ -98,7 +99,27 @@ export interface GET_ORDERS {
     shipMode: string;
     paymentRecievedByDeliveryPartner: null;
     prescription: string;
+    cancel_reason: null;
+    items: {
+    id: number;
+    orderId: number;
+    productId: string;
+    productName: string;
+    productImg: string;
+    quantity: number;
+    total: number;
+    itemBuyPrice: number;
+    itemSellPriceCopy: number;
+    createdAt: string;
   }[];
+  }[];
+    pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  };
 }
 
 export interface GET_ORDER_DETAILS {
@@ -153,4 +174,24 @@ export interface GET_ORDER_DETAILS {
       totalOrderAmount: number;
     }[];
   };
+}
+
+export interface APPLY_COUPON_RESPONSE {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  result: {
+  coupon: {
+  id: number;
+  name: string;
+  coupon_code: string;
+  percent: number;
+  expiry_date: string;
+  created_at: string;
+  min_amount: number;
+  live: string;
+};
+  discountAmount: number;
+  finalAmount: number;
+};
 }

@@ -13,16 +13,17 @@ class AddressService {
   };
 
 
-  getUserAddresses = async (data: { userId: number }): Promise<AxiosResponse<GET_USER_ADDRESSES>> => {
-    const { userId } = data
+  getUserAddresses = async (data: { userId: number, pageParam?: number }): Promise<AxiosResponse<GET_USER_ADDRESSES>> => {
+    const { userId, pageParam = 1 } = data
     return fetcher({
-      url: `/user-address/${userId}`,
+      url: `/user-address/${userId}?page=${pageParam}&limit=10`,
       method: 'GET',
     });
   }
 
   addUserAddress = async (data: { userId: number, payload: any }): Promise<AxiosResponse<ADD_USER_ADDRESS>> => {
     const { userId, payload } = data
+    console.log(data,'kldsdf');
     return fetcher({
       url: `/user-address/${userId}`,
       method: 'POST',

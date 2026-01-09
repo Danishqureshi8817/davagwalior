@@ -1,9 +1,9 @@
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import { Platform, StyleSheet, TouchableOpacity, StatusBar } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { screenHeight } from '@utils/Scaling'
 import { moderateScale, moderateScaleVertical } from '@utils/responsiveSize'
 import { Container } from '@components/global/Container'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, withTiming, useAnimatedReaction, runOnJS } from 'react-native-reanimated'
 import {
   CollapsibleContainer,
   CollapsibleScrollView,
@@ -31,6 +31,43 @@ const Home = () => {
   const insets = useSafeAreaInsets()
   const { scrollY, expand } = useCollapsibleContext()
   const previousScroll = useRef<number>(0)
+  const isHeaderHidden = useRef<boolean>(false)
+  const [statusBarBackgroundColor, setStatusBarBackgroundColor] = useState('#F6F7F9')
+
+  // Function to update status bar when header is hidden/shown
+  const updateStatusBar = (headerHidden: boolean) => {
+    if (headerHidden) {
+      // Header is hidden - set status bar to white background with dark content
+      StatusBar.setBarStyle('dark-content')
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#FFFFFF')
+      } else {
+        // For iOS, update the state which will update Container's prop
+        setStatusBarBackgroundColor('#FFFFFF')
+      }
+    } else {
+      // Header is visible - set status bar to original color
+      StatusBar.setBarStyle('dark-content')
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#F6F7F9')
+      } else {
+        // For iOS, update the state which will update Container's prop
+        setStatusBarBackgroundColor('#F6F7F9')
+      }
+    }
+  }
+
+  // Watch scroll position and update status bar when header is hidden/shown
+  useAnimatedReaction(
+    () => scrollY?.value ?? 0,
+    (scrollValue) => {
+      const headerHidden = scrollValue >= 60 // Header hides at scrollY >= 120
+      if (headerHidden !== isHeaderHidden.current) {
+        isHeaderHidden.current = headerHidden
+        runOnJS(updateStatusBar)(headerHidden)
+      }
+    }
+  )
 
   const backToTopStyle = useAnimatedStyle(() => {
 
@@ -72,7 +109,7 @@ const Home = () => {
 
 
   return (
-    <Container statusBarStyle='dark-content' statusBarBackgroundColor='#F6F7F9' >
+    <Container statusBarStyle='dark-content' statusBarBackgroundColor={statusBarBackgroundColor} >
       <Visuals />
       <Animated.View style={[styles.backToTopButton, backToTopStyle]} >
         <TouchableOpacity
@@ -93,7 +130,7 @@ const Home = () => {
         </TouchableOpacity>
       </Animated.View>
 
-      <CollapsibleContainer style={[styles.panelContainer, { marginTop: insets.top || moderateScaleVertical(20) }]} >
+      <CollapsibleContainer style={[styles.panelContainer, { marginTop: 0 }]} >
         <CollapsibleHeaderContainer containerStyle={styles.transparent} >
           <AnimatedHeader
             showNotice={() => {
@@ -127,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: Colors.deepPurple,
+    backgroundColor: Colors.primary,
     borderRadius: moderateScale(20),
     paddingHorizontal: moderateScale(10),
     paddingVertical: moderateScaleVertical(5),

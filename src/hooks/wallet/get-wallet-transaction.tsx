@@ -1,11 +1,21 @@
 import walletService from '@services/wallet-service';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
- function useGetWalletTransactions(data: { userId : number}) {
-  return useQuery({
+function useGetWalletTransactions(data: { userId : number}) {
+  return useInfiniteQuery({
     queryKey: [walletService.queryKeys.getWalletTransactions + data?.userId],
-    queryFn: () => walletService.getWalletTransactions(data),
-    enabled: !!data,
+    queryFn: ({ pageParam = 1 }: any) => walletService.getWalletTransactions({
+      userId: data.userId,
+      pageParam: pageParam ?? 1,
+    }),
+    getNextPageParam: (lastPage: any, pages) => {
+      if (lastPage?.data?.result?.pagination?.page < lastPage?.data?.result?.pagination?.totalPages) {
+        return lastPage?.data?.result?.pagination?.page + 1;
+      }
+      return null;
+    },
+    initialPageParam: 1,
+    enabled: !!data?.userId,
   });
 }
 

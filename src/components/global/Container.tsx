@@ -1,9 +1,9 @@
-import React, { Fragment, useCallback } from 'react';
-import { Platform, SafeAreaView, StatusBar, StatusBarStyle, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { Platform, StatusBar, StatusBarStyle, View } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/core';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@utils/Constants';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export interface ContainerProps {
@@ -23,11 +23,8 @@ export function Container(props: ContainerProps) {
     statusBarBackgroundColor,
     statusBarStyle = "light-content",
   } = props;
-  const statusBarBackgroundColorIos = statusBarBackgroundColor
-  const screenBackgroundColor = backgroundColor
-
-  const init = useSafeAreaInsets();
-
+  const screenBackgroundColor = backgroundColor;
+  const insets = useSafeAreaInsets();
 
   useFocusEffect(
     useCallback(() => {
@@ -39,18 +36,35 @@ export function Container(props: ContainerProps) {
     }, [fullScreen, statusBarBackgroundColor, statusBarStyle]),
   );
 
+  // For iOS, we need to handle status bar background color separately
+  if (Platform.OS === 'ios' && !fullScreen) {
+    return (
+      <View style={{ flex: 1, backgroundColor: statusBarBackgroundColor ?? screenBackgroundColor }}>
+        <StatusBar barStyle={statusBarStyle} />
+        <View style={{ height: insets.top, backgroundColor: statusBarBackgroundColor ?? screenBackgroundColor }} />
+        <SafeAreaView 
+          edges={['left', 'right', 'bottom']}
+          style={{ 
+            flex: 1, 
+            backgroundColor: screenBackgroundColor,
+          }}
+        >
+          {children}
+        </SafeAreaView>
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, backgroundColor: screenBackgroundColor }}>
-      {fullScreen ? (
-        <Fragment>{children}</Fragment>
-      ) : (
-        <Fragment>
-          <SafeAreaView  style={{ flex: 0, backgroundColor: statusBarBackgroundColorIos }} />
-          <SafeAreaView style={{ flex: 1, backgroundColor: screenBackgroundColor,paddingBottom:init.bottom }}>
-            {children}
-          </SafeAreaView>
-        </Fragment>
-      )}
-    </View>
+    <SafeAreaView 
+      edges={fullScreen ? [] : ['left', 'right', 'bottom', 'top']}
+      style={{ 
+        flex: 1, 
+        backgroundColor: screenBackgroundColor,
+      }}
+    >
+      <StatusBar barStyle={statusBarStyle} />
+      {children}
+    </SafeAreaView>
   );
 }

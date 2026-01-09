@@ -12,6 +12,8 @@ import { Colors, Fonts, RoutesName } from "@utils/Constants"
 import { shadowStyle } from "@styles/GlobalStyles"
 import CustomText from "@components/global/CustomText"
 import { navigate } from "@utils/NavigationUtils"
+import { BaseIMGURL } from "@services/config"
+import { useAuthStore } from "@state/authStore"
 
 interface CategoryItem {
   id: number
@@ -28,6 +30,8 @@ const FavoriteCategories: FC<FavoriteCategoriesProps> = ({ data }) => {
     navigate(RoutesName.ProductListing, { selectedCat: name })
   }
 
+  const { settingData } = useAuthStore()
+
   const renderItem: ListRenderItem<CategoryItem> = ({ item }) => (
     <Pressable
       style={styles.itemWrapper}
@@ -35,7 +39,7 @@ const FavoriteCategories: FC<FavoriteCategoriesProps> = ({ data }) => {
     >
       <View style={[styles.itemImgContainer, shadowStyle]}>
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: `${settingData?.s3Url}${item.image}` }}
           style={styles.itemImg}
           resizeMode="contain"
         />
@@ -54,7 +58,7 @@ const FavoriteCategories: FC<FavoriteCategoriesProps> = ({ data }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <CustomText
           variant="h5"
           fontFamily={Fonts.Bold}
@@ -67,7 +71,7 @@ const FavoriteCategories: FC<FavoriteCategoriesProps> = ({ data }) => {
           source={require("@assets/images/homeDivider.png")}
           style={styles.divider}
         />
-      </View>
+      </View> */}
 
       {/* Horizontal Scrollable List */}
       <FlatList

@@ -1,8 +1,7 @@
 
-import { useFocusEffect } from "@react-navigation/native";
-import { moderateScaleVertical } from "@utils/responsiveSize";
-import React, { useCallback, useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { moderateScale } from "@utils/responsiveSize";
+import React, { useMemo } from "react";
+import { Platform, StyleSheet } from "react-native";
 import {
   KeyboardAwareScrollView,
   KeyboardAwareScrollViewProps,
@@ -31,9 +30,14 @@ function Body(props: BodyProps) {
     <KeyboardAwareScrollView
       contentContainerStyle={[styles.containerStyle, style]}
       keyboardShouldPersistTaps={"handled"}
-      enableOnAndroid={false}
+      enableOnAndroid={true}
       showsVerticalScrollIndicator={false}
-      // extraScrollHeight={moderateScaleVertical(80)}
+      nestedScrollEnabled={true}
+      showsHorizontalScrollIndicator={false}
+      extraScrollHeight={Platform.OS === 'android' ? moderateScale(150) : moderateScale(80)}
+      enableAutomaticScroll={true}
+      enableResetScrollToCoords={Platform.OS === 'ios'}
+      keyboardOpeningTime={Platform.OS === 'ios' ? 250 : 0}
       {...props}
     />
   );

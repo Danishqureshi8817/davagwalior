@@ -15,10 +15,9 @@ import { View, StyleSheet, Image, ImageBackground, Pressable, ActivityIndicator 
 const ReferAndEarn = () => {
 
   // init
-  const { user } = useAuthStore()
+  const { user, settingData } = useAuthStore()
 
   const { data, isLoading } = useGetUserProfile({ userId: user?.userUniqueId })
-  const { data: settingData, isLoading: settingIsLoading } = useGetSettings()
 
   const Header = () => (
     <View style={styles.headerContainer}>
@@ -32,7 +31,7 @@ const ReferAndEarn = () => {
             <LessWhiteIcon />
           </Pressable>
           <CustomText variant="h5" fontFamily={Fonts.SemiBold} numberOfLine={1} style={styles.headerTitle}>Refer And Earn</CustomText>
-          <View style={{ width: 24 }} />
+          <View style={{ width: moderateScale(24) }} />
         </View>
         <Image
           source={require('@assets/icons/referCashIcon.png')}
@@ -43,7 +42,7 @@ const ReferAndEarn = () => {
     </View>
   )
 
-  if (isLoading || settingIsLoading) {
+  if (isLoading ) {
     return (
       <Container statusBarBackgroundColor={Colors.paleGray} statusBarStyle="dark-content">
         <Header />
@@ -59,7 +58,7 @@ const ReferAndEarn = () => {
       <Header />
       <View style={styles.cardContainer}>
         <CustomText variant="h4" fontFamily={Fonts.SemiBold} style={styles.bonusText}>
-          Invite Friend to get ₹ {settingData?.data?.result?.referalBonus ?? 'N/A'}
+          Invite Friend to get ₹ {settingData?.referalBonus ?? 'N/A'}
         </CustomText>
 
         <CustomText variant="h7" fontFamily={Fonts.Regular} style={styles.subText}>
@@ -69,7 +68,7 @@ const ReferAndEarn = () => {
         <View style={styles.codeBox}>
           <CustomText variant="h8" fontFamily={Fonts.Medium} style={styles.codeLabel}>
             Copy your Code:
-            <CustomText variant="h7" fontFamily={Fonts.SemiBold} style={styles.codeValue}> {data?.data?.result?.userReferalCode ?? 'N/A'}</CustomText>
+            <CustomText variant="h7" fontFamily={Fonts.SemiBold} style={styles.codeValue}> {data?.data?.result?.user?.userReferalCode ?? 'N/A'}</CustomText>
           </CustomText>
           <ReferCopyIocn />
         </View>

@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import CountDown from 'react-native-countdown-component';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { ParamListBase, useNavigation, useRoute } from '@react-navigation/native'
 import { OtpInput, OtpInputProps } from 'react-native-otp-entry'
@@ -19,6 +18,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { tokenStorage } from '@state/storage';
 import { useAuthStore } from '@state/authStore';
 import { shadowStyle } from '@styles/GlobalStyles';
+import Body from '@components/global/Body';
+import CountDown from '@components/global/CountDown';
 
 interface ExtendedOtpInputProps extends OtpInputProps {
   pinCodeContainerStyle?: object; // Add missing property
@@ -36,6 +37,7 @@ const OtpVerify = () => {
   // states
   const [otpInput, setOtpInput] = useState<string>('');
   const [isTimeOver, setIsTimeOver] = useState(true);
+  const [countdownKey, setCountdownKey] = useState(0);
 
   // api
   const useOtpVerifingMutation = useOtpVerifing()
@@ -78,6 +80,7 @@ const OtpVerify = () => {
   const onOTPResend = () => {
     const payload = {
       mobile: mobile,
+      mobilecountrycode: 91,
     }
     useOtpResendMutation.mutate(payload, {
       onSuccess: (data) => {
@@ -85,6 +88,9 @@ const OtpVerify = () => {
 
         if (data?.data?.success) {
           showToast(`${data?.data?.message}${data?.data?.result?.otp}`, 'success');
+          // Reset countdown
+          setIsTimeOver(true);
+          setCountdownKey(prev => prev + 1); // Force CountDown to remount and restart
         } else {
           showToast(`Something went wrong, please try again later`, 'error');
         }
@@ -95,7 +101,9 @@ const OtpVerify = () => {
   return (
     <Container fullScreen={true} statusBarBackgroundColor='transparent' statusBarStyle='dark-content'>
       {/* <ImageBackground alt='loginBg' source={require('@assets/images/loginBg.png')} style={[styles.topBgContainer, { paddingTop: moderateScaleVertical(20) }]} resizeMode='cover'> */}
-       
+       <Body>
+
+
        <View style={[styles.topBgContainer, { paddingTop: moderateScaleVertical(20) }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}  >
           <LessIcon />
@@ -120,7 +128,7 @@ const OtpVerify = () => {
         <OtpInput
           numberOfDigits={4}
           onTextChange={(text) => setOtpInput(text)}
-          focusColor={Colors.primary2}
+          focusColor={Colors.primary}
           focusStickBlinkingDuration={400}
           theme={{
             pinCodeContainerStyle: {
@@ -137,27 +145,34 @@ const OtpVerify = () => {
       </View>
 
 
-      {isTimeOver ? (<View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-        <CustomText variant='h7' style={{ textAlign: 'center', color: Colors.grayish }} fontFamily={Fonts.Regular} numberOfLine={1} >Resend code in</CustomText>
-        <View style={{ height: moderateScale(3), marginTop: moderateScaleVertical(-3) }}>
+      {isTimeOver ? (
+        <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', gap: moderateScale(5) }}>
+          <CustomText variant='h7' style={{ textAlign: 'center', color: Colors.grayish }} fontFamily={Fonts.Regular} numberOfLine={1} >Resend code in</CustomText>
           <CountDown
+            key={countdownKey}
             id={'1'}
             until={15}
             onFinish={onFinishTimer}
-            digitStyle={{ backgroundColor: Colors.white }}
-            digitTxtStyle={{ color: Colors.deepLavende, fontFamily: Fonts.SemiBold, fontSize: RFValue(14) }}
+            digitStyle={{ backgroundColor: 'transparent' }}
+            digitTxtStyle={{ color: Colors.primary, fontFamily: Fonts.SemiBold, fontSize: RFValue(14) }}
             timeToShow={['M', 'S']}
             timeLabels={{ m: undefined, s: undefined }}
             showSeparator
           />
         </View>
-      </View>) : (<Pressable onPress={onOTPResend}>
-        {useOtpResendMutation?.isPending ? (<ActivityIndicator color={Colors.Purple} size={'small'} />) : (<CustomText variant='h7' style={{ textAlign: 'center', color: Colors.primary2 }} fontFamily={Fonts.SemiBold} numberOfLine={1} >Resend OTP</CustomText>)}
-      </Pressable>)}
+      ) : (
+        <Pressable onPress={onOTPResend} style={{ alignSelf: 'center' }}>
+          {useOtpResendMutation?.isPending ? (
+            <ActivityIndicator color={Colors.primary} size={'small'} />
+          ) : (
+            <CustomText variant='h7' style={{ textAlign: 'center', color: Colors.primary }} fontFamily={Fonts.SemiBold} numberOfLine={1} >Resend OTP</CustomText>
+          )}
+        </Pressable>
+      )}
 
 
       <PrimaryButton onPress={onOTPVerifing} buttonText='Verify OTP' disabled={useOtpVerifingMutation.isPending} loading={useOtpVerifingMutation.isPending} marginHorizontal={moderateScale(10)} borderRadius={moderateScale(10)} marginTop={moderateScaleVertical(30)} />
-
+      </Body>
     </Container>
   )
 }

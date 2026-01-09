@@ -103,4 +103,5 @@ export const RoutesName = {
     Wallet : 'Wallet',
     AddAddress : 'AddAddress',
     ViewAllWalletTransactions : 'ViewAllWalletTransactions',
+    Search : 'Search',
   };

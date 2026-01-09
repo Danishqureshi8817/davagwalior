@@ -12,6 +12,7 @@ export default function useAddUserAddress() {
       showToast('Added successfully', 'success');
     },
     onError: (error: any) => {
+      console.log(error,'kldsfsdf');
       showToast('Something went wrong while add new address<', 'error');
     },
   });

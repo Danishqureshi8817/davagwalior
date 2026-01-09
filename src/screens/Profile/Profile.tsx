@@ -45,7 +45,7 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <Container statusBarBackgroundColor={Colors.paleGray} backgroundColor={Colors.paleGray} statusBarStyle='dark-content'>
+      <Container statusBarBackgroundColor={Colors.paleGray} backgroundColor={Colors.white} statusBarStyle='dark-content'>
         <AppBar back title='Profile' />
         <View style={styles.spinnerContainer}>
           <ActivityIndicator size={'large'} color={Colors.Purple} />
@@ -59,23 +59,23 @@ const Profile = () => {
       <AppBar back title='Profile' />
       <Body contentContainerStyle={styles.body}>
         <View style={styles.profileCard}>
-          {!!data?.data?.result?.avatarUrl ?
-            <Image source={{ uri: data?.data?.result?.avatarUrl }} style={styles.profileImage} /> :
-            !!data?.data?.result?.displayName ?
-              <Avatar bgColor={Colors.Purple} fallbackText={data?.data?.result?.displayName} containerStyle={{ alignSelf: 'center' }} />
+          {!!data?.data?.result?.user?.avatarUrl ?
+            <Image source={{ uri: data?.data?.result?.user?.avatarUrl }} style={styles.profileImage} /> :
+            !!data?.data?.result?.user?.displayName ?
+              <Avatar bgColor={Colors.Purple} fallbackText={data?.data?.result?.user?.displayName} containerStyle={{ alignSelf: 'center' }} />
               :
               <Image source={require('@assets/images/savemoneyHome.png')} style={styles.profileImage} />
           }
 
           <View style={styles.profileDetails}>
-            <CustomText style={styles.name}>{data?.data?.result?.displayName ?? 'N/A'}</CustomText>
+            <CustomText style={styles.name}>{data?.data?.result?.user?.displayName ?? 'N/A'}</CustomText>
             <View style={styles.infoRow}>
               <ProfileMailIcon />
-              <CustomText style={styles.infoText}>{data?.data?.result?.email ?? 'N/A'}</CustomText>
+              <CustomText style={styles.infoText}>{data?.data?.result?.user?.email ?? 'N/A'}</CustomText>
             </View>
             <View style={styles.infoRow}>
               <ProfileCallIcon />
-              <CustomText style={styles.infoText}>{data?.data?.result?.mobile ?? 'N/A'}</CustomText>
+              <CustomText style={styles.infoText}>{data?.data?.result?.user?.mobile ?? 'N/A'}</CustomText>
             </View>
           </View>
         </View>
@@ -83,7 +83,7 @@ const Profile = () => {
         <View style={styles.section}>
           <Pressable onPress={() => navigate(RoutesName.EditProfile)} style={styles.settingRow}>
             <View style={styles.rowContent}>
-              <MIcon name="edit" size={RFValue(20)} color={'#A74AC7'} />
+              <MIcon name="edit" size={RFValue(20)} color={Colors.primary} />
               <CustomText style={styles.optionText}>Edit Profile</CustomText>
             </View>
             <GreaterProfileIcon />

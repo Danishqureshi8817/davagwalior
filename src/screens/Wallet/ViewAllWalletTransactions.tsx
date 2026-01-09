@@ -27,7 +27,16 @@ const ViewAllWalletTransactions = () => {
   const { user } = useAuthStore()
 
   // api
-  const { data, isLoading, refetch, isRefetching } = useGetWalletTransactions({ userId: user?.userUniqueId });
+  const { data, isLoading, refetch, isRefetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetWalletTransactions({ userId: user?.userUniqueId });
+
+  // Flatten all pages data
+  const allTransactions = data?.pages?.flatMap(page => page?.data?.result?.wallettxn || []) || []
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
 
   if (isLoading) {
     return (
@@ -45,7 +54,7 @@ const ViewAllWalletTransactions = () => {
       <AppBar back title={'Wallet Transactions'} />
 
       <FlatList
-        data={data?.data?.result}
+        data={allTransactions}
         renderItem={({ item }: { item: WALLET_CARD }) => {
           const date = new Date(item?.createdAt);
           return (
@@ -72,6 +81,18 @@ const ViewAllWalletTransactions = () => {
             </View>
           );
         }}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          if (isFetchingNextPage) {
+            return (
+              <View style={{ height: moderateScale(50), justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.Purple} />
+              </View>
+            )
+          }
+          return null
+        }}
         refreshControl={<RefreshControl
           refreshing={isRefetching}
           onRefresh={async () => await refetch()}
@@ -81,6 +102,20 @@ const ViewAllWalletTransactions = () => {
         keyExtractor={(item: WALLET_CARD) => item?.id?.toString()}
         contentContainerStyle={styles.flatListContent}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => {
+          if (isLoading) {
+            return (
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color={Colors.Purple} />
+              </View>
+            )
+          }
+          return (
+            <View style={styles.emptyContainer}>
+              <CustomText variant="h6" fontFamily={Fonts.Medium} numberOfLine={1} style={{  }}>No Transactions Found</CustomText>
+            </View>
+          )
+        }}
       />
     </Container>
   );
@@ -93,6 +128,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   flatListContent: {
+    flexGrow: 1,
     gap: moderateScaleVertical(10),
     alignItems: 'center',
     paddingVertical: moderateScaleVertical(15),
@@ -101,10 +137,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     height: moderateScale(80),
-    borderColor: Colors.brightGray,
-    width: '90%',
+    borderBottomColor: Colors.brightGray,
+    width: '100%',
     borderRadius: moderateScale(10),
     paddingHorizontal: moderateScale(15),
   },
@@ -120,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(23),
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'flex-start',
+    // alignSelf: 'flex-start',
   },
   cardText: {
     gap: 4,
@@ -130,6 +166,12 @@ const styles = StyleSheet.create({
   },
   amountText: {
     color: Colors.darkViolet,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // paddingVertical: moderateScaleVertical(15),
   },
 });
 

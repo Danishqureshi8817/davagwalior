@@ -33,7 +33,7 @@ const Header: FC<{ showNotice: () => void }> = ({ showNotice }) => {
           </CustomText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: moderateScale(3), }}>
             <CustomText variant='h7' fontFamily={Fonts.Medium} style={{ color: Colors.black, }} numberOfLine={1}>
-              {user?.userLocation?.address || 'Your Address'}
+              {!!user?.saveAddressLocal?.Address ? user?.saveAddressLocal?.Address : user?.userLocation?.address || 'Your Address'}
             </CustomText>
             <Icon name="chevron-down" size={RFValue(15)} color='#9996A9' />
           </View>
@@ -60,7 +60,7 @@ const Header: FC<{ showNotice: () => void }> = ({ showNotice }) => {
                 style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center' }}
               >
                 <CustomText variant='h9' fontFamily={Fonts.Medium} style={{ color: Colors.white }} numberOfLine={1}>
-                  {'\u20B9'}{profileData?.data?.result?.wallet || 0}
+                  {'\u20B9'}{profileData?.data?.result?.user?.wallet || 0}
                 </CustomText>
               </LinearGradient>
             </View>

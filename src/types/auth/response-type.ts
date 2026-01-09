@@ -38,12 +38,30 @@ export interface GET_SETTINGS {
   success: boolean;
   message: string;
   result: {
+    setting : {
     id: number;
     codCharges: string;
     deliveryCharges: string;
     expressCharges: string;
     referalBonus: number;
+    s3Url: string;
   };
+  }
 }  
 
+export interface GET_REFRESH_TOKENS {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  result: {
+  token: string;
+  refreshToken: string;
+  expirationTime: number;
+  user: {
+  userUniqueId: number;
+  mobile: string;
+  displayName: string;
+};
+};
+}
   

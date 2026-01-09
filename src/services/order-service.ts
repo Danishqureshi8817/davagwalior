@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { CREATE_ORDER, GET_ORDER_DETAILS, GET_ORDERS } from '../types/order/response-type';
+import { APPLY_COUPON_RESPONSE, CREATE_ORDER, GET_ORDER_DETAILS, GET_ORDERS } from '../types/order/response-type';
 import { fetcher } from '../utils/fetcher';
 
 interface CREATE_ORDER_DATA {
@@ -12,6 +12,8 @@ interface CREATE_ORDER_DATA {
   }[];
   couponCode: string;
   prescription: string;
+  shippingCharge: number;
+  codCharge: number;
   shipMode: string;
   paymentMod: string;
 }
@@ -32,11 +34,11 @@ class OrderService {
     });
   }
 
-  getOrders = async (data: { userId: number, startDate?: string, status: string, endDate?: string }): Promise<AxiosResponse<GET_ORDERS>> => {
-    const { userId, startDate, status, endDate } = data
+  getOrders = async (data: { userId: number, startDate?: string, status: string, endDate?: string, pageParam?: number }): Promise<AxiosResponse<GET_ORDERS>> => {
+    const { userId, startDate, status, endDate, pageParam = 1 } = data
 
     return fetcher({
-      url: `/orders?userId=${userId}&status=${status}`,
+      url: `/orders/my?userId=${userId}&status=${status}&page=${pageParam}&limit=10`,
       method: 'GET',
     });
   }
@@ -49,6 +51,17 @@ class OrderService {
       method: 'GET',
     });
   }
+
+  applyCoupon = async (data: { couponCode: string, totalAmount: number }): Promise<AxiosResponse<APPLY_COUPON_RESPONSE>> => {
+    const { couponCode, totalAmount } = data
+
+    return fetcher({
+      url: `/coupons/apply?coupon_code=${couponCode}&totalAmount=${totalAmount}`,
+      method: 'POST',
+    });
+  }
+
+  
 
 
 

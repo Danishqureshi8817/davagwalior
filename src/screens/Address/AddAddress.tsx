@@ -18,6 +18,7 @@ import { useAuthStore } from '@state/authStore';
 import { navigate } from '@utils/NavigationUtils';
 import PrimaryButton from '@components/ui/PrimaryButton';
 import useKeyboardOffsetHeight from '@utils/useKeyboardOffsetHeight';
+import useGetUserAddresses from '@hooks/address/get-user-addresses';
 
 
 const AddAddress = () => {
@@ -29,9 +30,14 @@ const AddAddress = () => {
   const fullName = editData.userName?.split(' ')
   const keyboardOffsetHeight = useKeyboardOffsetHeight();
 
+  // apis
   const useAddUserAddressMutation = useAddUserAddress()
   const useUpdateUserAddressMutation = useUpdateUserAddress()
+  const { data, isLoading, refetch, isRefetching } = useGetUserAddresses({ userId: user?.userUniqueId })
+
   const { handleSubmitGetLocationDetailByPin, isLoading: locationDetailByPinIsLoading } = useGetLocationDetailByPin()
+
+  console.log(user,'kldsuser adressfsdf');
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -65,7 +71,7 @@ const AddAddress = () => {
         userMobile: values.mobile,
         Address: values.address,
         landmark: values.landmark,
-        pincode: Number(values.pincode),
+        pincode: values.pincode,
         cityName: values.city,
         stateName: values.state,
         Country: values.country,
@@ -80,6 +86,7 @@ const AddAddress = () => {
                 queryKey: [addressService.queryKeys.getUserAddresses + Number(user?.userUniqueId)]
               })
               navigate(RoutesName.Address)
+              refetch()
               formik.resetForm()
             }
           }
@@ -92,6 +99,7 @@ const AddAddress = () => {
                   queryKey: [addressService.queryKeys.getUserAddresses + Number(user?.userUniqueId)]
                 })
                 navigate(RoutesName.Address)
+                refetch()
                 formik.resetForm()
               }
             }

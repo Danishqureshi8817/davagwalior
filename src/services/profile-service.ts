@@ -13,8 +13,9 @@ class ProfileService {
     const { userId } = data
     
     return fetcher({
-      url: `/auth/profile?userUniqueId=${userId}`,
+      url: `/auth/profile`,
       method: 'GET',
+      data: { userUniqueId: userId }
     });
   }
 

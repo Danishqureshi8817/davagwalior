@@ -30,20 +30,10 @@ const EditProfile = () => {
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: { name: data?.data?.result?.displayName ?? '', email: data?.data?.result?.email ?? '' },
+    initialValues: { name: data?.data?.result?.user?.displayName ?? '', email: data?.data?.result?.user?.email ?? '' },
     validationSchema: editProfileSchema,
     onSubmit: values => {
-      const payload = {
-        displayName: `${formik?.values?.name}`,
-        country: "INDIA",
-        email: formik?.values?.email
-      }
-      useUpdateUserProfileMutation.mutate({ payload, userid: user?.userUniqueId }, {
-        onSuccess: () => {
-         refetch()
-          goBack()
-        }
-      })
+      console.log(values);
     }
   })
 
@@ -72,7 +62,7 @@ const EditProfile = () => {
         <Body>
           <View style={styles.inputContainer}>
             <InputText
-              label='First Name'
+              label='Full Name'
               textInputProps={{
                 placeholder: "Enter first name",
                 value: formik.values.name,

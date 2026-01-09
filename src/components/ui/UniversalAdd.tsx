@@ -15,7 +15,7 @@ const UniversalAdd: FC<{ item: any }> = ({ item }) => {
   const { addItem, removeItem, clearCart } = useCartStore();
 
   return (
-    <View style={[styles.container, { backgroundColor: count === 0 ? '#fff' : Colors.deepPurple }]} >
+    <View style={[styles.container, { backgroundColor: count === 0 ? '#fff' : Colors.primary }]} >
       {
         count == 0 ? (
           <Pressable onPress={() => addItem(item)} style={styles.add}>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.deepPurple,
+    borderColor: Colors.primary,
     width: '100%',
     borderRadius: moderateScale(8),
     marginVertical: moderateScaleVertical(6)
@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
     paddingVertical: moderateScaleVertical(6)
   },
   addText: {
-    color: Colors.deepPurple,
+    color: Colors.primary,
   },
   counterContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: "100%",
     paddingHorizontal: moderateScale(4),
-    paddingVertical: moderateScaleVertical(6),
+    paddingVertical: moderateScaleVertical(4),
     justifyContent: 'space-between'
   },
   text: {

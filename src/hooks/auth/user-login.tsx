@@ -8,6 +8,7 @@ export default function useUserLogin() {
   return useMutation({
     mutationFn: authService.userLogin,
     onError: (error: any) => {
+      console.log(error?.response?.data,'kl');
       showToast('Something went wrong while Login', 'error');
     },
   });

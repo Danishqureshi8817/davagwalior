@@ -1,3 +1,4 @@
+import { Colors } from "@utils/Constants";
 import * as React from "react";
 import Svg, { G, Path, Defs, LinearGradient, Stop, ClipPath, SvgProps, Circle, Pattern, Image, Use, Rect } from "react-native-svg";
 
@@ -219,7 +220,7 @@ export const EditIcon = (props: SvgProps) => (
         <Defs>
             <LinearGradient id="b" x1={2} x2={14.217} y1={2.019} y2={2.266} gradientUnits="userSpaceOnUse">
                 <Stop stopColor="#A74AC7" />
-                <Stop offset={1} stopColor="#690DAC" />
+                <Stop offset={1} stopColor="#411353" />
             </LinearGradient>
             <ClipPath id="a">
                 <Path fill="#fff" d="M0 0h16v16H0z" />
@@ -386,8 +387,8 @@ export const ProfileWalletIcon = (props: SvgProps) => (
         <Path fill="url(#a)" d="M16.5 6.417h2.75a.917.917 0 0 1 .916.916v11a.917.917 0 0 1-.916.917H2.75a.917.917 0 0 1-.917-.917V3.667a.917.917 0 0 1 .917-.917H16.5v3.667ZM3.666 8.25v9.167h14.667V8.25H3.666Zm0-3.667v1.834h11V4.583h-11Zm10.084 7.334h2.75v1.833h-2.75v-1.833Z" />
         <Defs>
             <LinearGradient id="a" x1={1.833} x2={20.527} y1={2.75} y2={3.169} gradientUnits="userSpaceOnUse">
-                <Stop stopColor="#A74AC7" />
-                <Stop offset={1} stopColor="#690DAC" />
+                <Stop stopColor={Colors.primary} />
+                <Stop offset={1} stopColor={Colors.primary} />
             </LinearGradient>
         </Defs>
     </Svg>
@@ -400,8 +401,8 @@ export const ProfileReferIcon = (props: SvgProps) => (
         </G>
         <Defs>
             <LinearGradient id="b" x1={1.833} x2={20.529} y1={1.833} y2={2.21} gradientUnits="userSpaceOnUse">
-                <Stop stopColor="#A74AC7" />
-                <Stop offset={1} stopColor="#690DAC" />
+                <Stop stopColor={Colors.primary} />
+                <Stop offset={1} stopColor={Colors.primary} />
             </LinearGradient>
             <ClipPath id="a">
                 <Path fill="#fff" d="M0 0h22v22H0z" />
@@ -417,8 +418,8 @@ export const ProfileRateUsIcon = (props: SvgProps) => (
         </G>
         <Defs>
             <LinearGradient id="b" x1={3.667} x2={20.882} y1={0.917} y2={1.218} gradientUnits="userSpaceOnUse" >
-                <Stop stopColor="#A74AC7" />
-                <Stop offset={1} stopColor="#690DAC" />
+                <Stop stopColor={Colors.primary} />
+                <Stop offset={1} stopColor={Colors.primary} />
             </LinearGradient>
             <ClipPath id="a">
                 <Path fill="#fff" d="M0 0h22v22H0z" />
@@ -432,8 +433,8 @@ export const ProfileHelpIcon = (props: SvgProps) => (
         <Path fill="url(#a)" d="M10.954 16.5c.32 0 .592-.11.814-.333.222-.222.332-.493.332-.813 0-.32-.11-.592-.332-.814a1.102 1.102 0 0 0-.814-.332c-.321 0-.592.111-.813.333a1.11 1.11 0 0 0-.333.813c0 .321.11.592.333.814.222.222.493.333.813.332Zm-.825-3.53h1.696c0-.503.057-.9.172-1.19.115-.291.44-.688.973-1.192.398-.398.71-.776.94-1.135.23-.36.344-.791.344-1.295 0-.855-.313-1.512-.94-1.97-.626-.459-1.367-.688-2.223-.688-.87 0-1.577.23-2.119.688a3.646 3.646 0 0 0-1.135 1.65l1.513.595c.076-.275.248-.573.516-.893.267-.321.676-.482 1.225-.482.49 0 .856.134 1.1.402.245.267.367.561.367.882 0 .305-.092.592-.275.86a3.66 3.66 0 0 1-.688.744c-.672.596-1.084 1.046-1.237 1.352-.153.306-.23.863-.23 1.673Zm.87 7.197a8.93 8.93 0 0 1-3.574-.722 9.242 9.242 0 0 1-2.91-1.96 9.25 9.25 0 0 1-1.96-2.91A8.942 8.942 0 0 1 1.833 11c0-1.268.24-2.46.722-3.575a9.271 9.271 0 0 1 1.96-2.91 9.25 9.25 0 0 1 2.91-1.96A8.942 8.942 0 0 1 11 1.834c1.268 0 2.46.241 3.575.723a9.271 9.271 0 0 1 2.91 1.959 9.262 9.262 0 0 1 1.96 2.91A8.908 8.908 0 0 1 20.166 11a8.92 8.92 0 0 1-.722 3.575 9.27 9.27 0 0 1-1.959 2.91 9.262 9.262 0 0 1-2.91 1.96 8.91 8.91 0 0 1-3.575.722Zm0-1.834c2.048 0 3.782-.71 5.203-2.13 1.42-1.422 2.131-3.156 2.131-5.203s-.71-3.781-2.131-5.202C14.78 4.378 13.047 3.667 11 3.667c-2.048 0-3.782.71-5.202 2.13C4.377 7.22 3.666 8.954 3.666 11s.71 3.781 2.132 5.202c1.42 1.42 3.154 2.131 5.202 2.131Z" />
         <Defs>
             <LinearGradient id="a" x1={1.833} x2={20.529} y1={1.833} y2={2.21} gradientUnits="userSpaceOnUse" >
-                <Stop stopColor="#A74AC7" />
-                <Stop offset={1} stopColor="#690DAC" />
+                <Stop stopColor={Colors.primary} />
+                <Stop offset={1} stopColor={Colors.primary} />
             </LinearGradient>
         </Defs>
     </Svg>

@@ -23,7 +23,7 @@ const CartSummary: FC<CartSummaryProps> = ({ cartCount, cartImage }) => {
         <CustomText fontFamily={Fonts.SemiBold} >
           {cartCount} ITEM{cartCount > 1 ? 'S' : ''}
         </CustomText>
-        <Icon name='arrow-drop-up' color={Colors.deepPurple} size={RFValue(25)} />
+        <Icon name='arrow-drop-up' color={Colors.primary} size={RFValue(25)} />
       </View>
 
       <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => navigate(RoutesName.Cart)} >
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: screenHeight * 0.01,
     borderRadius: screenWidth * 0.025,
-    backgroundColor: Colors.deepPurple,
+    backgroundColor: Colors.primary,
     paddingHorizontal: screenWidth * 0.1
   },
   btnText: {

@@ -31,7 +31,7 @@ const PrimaryButton: FC<ButtonProps> = (props) => {
     <LinearGradient
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      colors={disabled ? ['gray', 'gray'] : [Colors.primary2, Colors.primary2]}
+      colors={disabled ? ['gray', 'gray'] : [Colors.primary, Colors.primary]}
       style={[styleProps, styles.button]}>
       <TouchableOpacity activeOpacity={0.8} onPress={onPress} disabled={disabled} style={styles.contentWrapper}>
           {loading ? (

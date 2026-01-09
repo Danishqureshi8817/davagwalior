@@ -71,7 +71,7 @@ export const useCartStore = create<CartStore>()(
         return currentItem ? currentItem?.count : 0
       },
       getTotalPrice: () => {
-        return get()?.cart?.reduce((total, cartItem) => total + cartItem.item?.price * cartItem?.count, 0)
+        return get()?.cart?.reduce((total, cartItem) => total + cartItem.item?.sellPrice * cartItem?.count, 0)
       }
     }),
     {

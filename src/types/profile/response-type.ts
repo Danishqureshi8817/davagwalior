@@ -3,17 +3,19 @@ export interface GET_USER_PROFILE {
   success: boolean;
   message: string;
   result: {
-    id: number;
-    displayName: string;
-    createdAt: string;
-    updatedAt: string;
-    userReferalCode: null;
-    userUniqueId: number;
-    wallet: number;
-    country: string;
-    email: string;
-    mobile: string;
-    avatarUrl: null;
-  };
+  user: {
+  id: number;
+  displayName: null;
+  createdAt: string;
+  updatedAt: string;
+  userReferalCode: null;
+  userUniqueId: number;
+  wallet: number;
+  country: string;
+  email: null;
+  mobile: string;
+  avatarUrl: null;
+};
+};
 }
   

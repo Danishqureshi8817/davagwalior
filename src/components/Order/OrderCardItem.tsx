@@ -10,6 +10,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 const OrderCardItem: FC<{ item: any }> = ({ item }) => {
   const date = new Date(item?.createdAt);
   return (
+    <Pressable onPress={() => navigate(RoutesName.OrderDetails, { orderId: item?.orderId })}>
     <View style={styles.card}>
       <View style={styles.rowBetween}>
         <View style={styles.iconContainer}>
@@ -18,13 +19,13 @@ const OrderCardItem: FC<{ item: any }> = ({ item }) => {
         <View style={styles.infoBlock}>
           <Text style={styles.orderId}>Order #{item?.orderId}</Text>
           <Text style={styles.label}>
-            Quantity: <Text style={styles.value}>2</Text>
+            Quantity: <Text style={styles.value}>{item?.items?.length}</Text>
           </Text>
         </View>
         <View style={styles.infoBlock}>
           <Text style={styles.date}>{format(date, 'dd MMM yyyy')}</Text>
           <Text style={styles.label}>
-            Subtotal: <Text style={styles.valueBold}>{'₹'}2400</Text>
+            Subtotal: <Text style={styles.valueBold}>{'₹'}{item?.subTotal}</Text>
           </Text>
         </View>
       </View>
@@ -38,6 +39,7 @@ const OrderCardItem: FC<{ item: any }> = ({ item }) => {
         </Pressable>
       </View>
     </View>
+    </Pressable>
   );
 };
 

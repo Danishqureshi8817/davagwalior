@@ -42,20 +42,29 @@ export interface GET_USER_ADDRESSES {
   success: boolean;
   message: string;
   result: {
-    id: number;
-    userId: number;
-    userName: string;
-    userMobile: null | string;
-    Address: string;
-    landmark: string;
-    pincode: number;
-    cityId: null | number;
-    cityName: null | string;
-    Country: null | string;
-    stateId: null | number;
-    stateName: null | string;
-    createdAt: string;
-  }[];
+    userAddresses: {
+      id: number;
+      userId: number;
+      userName: string;
+      userMobile: string;
+      Address: string;
+      landmark: string;
+      pincode: number;
+      cityId: null;
+      cityName: string;
+      Country: string;
+      stateId: null;
+      stateName: string;
+      createdAt: string;
+    }[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    }
+    ;
+  };
 }
 
 export interface ADD_USER_ADDRESS {

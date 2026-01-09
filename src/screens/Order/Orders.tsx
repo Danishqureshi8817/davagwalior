@@ -30,7 +30,16 @@ const Orders = () => {
   const [selectedOrderViewOption, setSelectedOrderViewOption] = useState<string>('O');
 
   // api
-  const { data, isLoading, isRefetching, refetch } = useGetUserOrders({ userId: user?.userUniqueId, status: selectedOrderViewOption });
+  const { data, isLoading, isRefetching, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetUserOrders({ userId: user?.userUniqueId, status: selectedOrderViewOption });
+
+  // Flatten all pages data
+  const allOrders = data?.pages?.flatMap(page => page?.data?.result?.orders || []) || []
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
 
 
   const OrderCategory = () => {
@@ -95,10 +104,22 @@ const Orders = () => {
         <OrderCategory />
       </View>
       <FlatList
-        data={data?.data?.result || []}
+        data={allOrders}
         renderItem={({ item }) => <OrderCardItem item={item} />}
         keyExtractor={(item) => item?.id?.toString()}
         contentContainerStyle={styles.listContainer}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          if (isFetchingNextPage) {
+            return (
+              <View style={{ height: moderateScale(50), justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.Purple} />
+              </View>
+            )
+          }
+          return null
+        }}
         refreshControl={<RefreshControl
           refreshing={isRefetching}
           onRefresh={async () => await refetch()}
@@ -107,7 +128,7 @@ const Orders = () => {
         />}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            {(isLoading || isRefetching) ? <ActivityIndicator size="large" color={Colors.deepPurple} /> : <Text style={styles.noOrders}>No Orders Found</Text>}
+            {(isLoading) ? <ActivityIndicator size="large" color={Colors.deepPurple} /> : <Text style={styles.noOrders}>No Orders Found</Text>}
           </View>
         )}
         showsVerticalScrollIndicator={false}
