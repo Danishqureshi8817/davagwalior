@@ -6,6 +6,7 @@ import { Colors } from '@utils/Constants'
 import CustomText from '@components/global/CustomText'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useAuthStore } from '@state/authStore'
+import { BaseIMGURL } from '@services/config'
 
 const AnimatedImage = Animated.createAnimatedComponent(Image)
 
@@ -66,7 +67,7 @@ const CategoryItemComponent: FC<CategoryItemComponentProps> = ({
           />
         ) : category?.image ? (
           <AnimatedImage
-            source={{ uri: `${settingData?.s3Url}${category?.image}` }}
+            source={{ uri: `${settingData?.s3Url || BaseIMGURL}${category?.image}` }}
             style={[styles.image, animatedStyle]}
           />
         ) : null}

@@ -20,13 +20,33 @@ const ShippingOptions : FC <ShippingOptionsProps> = ({ selectedShippingOption, o
   const totalItemPrice = getTotalPrice()
 
   
-  const codCharges = JSON.parse(settingData?.codCharges);
-  const deliveryCharges = JSON.parse(settingData?.deliveryCharges);
-  const expressCharges = JSON.parse(settingData?.expressCharges);
-  
-  const codCharge = getCharge(totalItemPrice, codCharges);
-  const deliveryCharge = getCharge(totalItemPrice, deliveryCharges);
-  const expressCharge = getCharge(totalItemPrice, expressCharges);
+  // Safely parse charges with error handling
+  let deliveryCharge = 0;
+  let expressCharge = 0;
+
+  if (settingData?.deliveryCharges) {
+    try {
+      const deliveryCharges = typeof settingData.deliveryCharges === 'string' 
+        ? JSON.parse(settingData.deliveryCharges) 
+        : settingData.deliveryCharges;
+      deliveryCharge = getCharge(totalItemPrice, deliveryCharges);
+    } catch (error) {
+      console.error('Error parsing deliveryCharges:', error);
+      deliveryCharge = 0;
+    }
+  }
+
+  if (settingData?.expressCharges) {
+    try {
+      const expressCharges = typeof settingData.expressCharges === 'string' 
+        ? JSON.parse(settingData.expressCharges) 
+        : settingData.expressCharges;
+      expressCharge = getCharge(totalItemPrice, expressCharges);
+    } catch (error) {
+      console.error('Error parsing expressCharges:', error);
+      expressCharge = 0;
+    }
+  }
 
   return (
     <View>

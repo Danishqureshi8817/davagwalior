@@ -9,6 +9,7 @@ import { Dimensions } from 'react-native'
 import { useAuthStore } from '@state/authStore'
 import { calculateDiscount } from '@utils/helperFunctions'
 import { navigate } from '@utils/NavigationUtils'
+import { BaseIMGURL } from '@services/config'
 
 const screenHeight = Dimensions.get('window').height
 
@@ -64,7 +65,7 @@ const ProductItem: FC<ProductItemProps> = ({ item, index }) => {
       >
         <View style={styles.imageContainer}>
           {item?.thumbnail ? (
-            <Image source={{ uri: `${settingData?.s3Url}${item?.thumbnail}` }} style={styles.image} />
+            <Image source={{ uri: `${settingData?.s3Url || BaseIMGURL}${item?.thumbnail}` }} style={styles.image} />
           ) : null}
         </View>
 

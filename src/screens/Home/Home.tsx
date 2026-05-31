@@ -24,15 +24,20 @@ import withCart from '@components/Cart/WithCart'
 import Geolocation from '@react-native-community/geolocation'
 import { reverseGeocode } from '@services/mapService'
 import { useAuthStore } from '@state/authStore'
+import useGetSettings from '@hooks/auth/get-settings'
 const Home = () => {
 
   // init
-  const { user, setUser } = useAuthStore()
+  const { user, setUser ,setSettingData} = useAuthStore()
   const insets = useSafeAreaInsets()
   const { scrollY, expand } = useCollapsibleContext()
   const previousScroll = useRef<number>(0)
   const isHeaderHidden = useRef<boolean>(false)
   const [statusBarBackgroundColor, setStatusBarBackgroundColor] = useState('#F6F7F9')
+
+
+  // api
+  const {data: settingDataFromAPI, isLoading: settingIsLoading} = useGetSettings()
 
   // Function to update status bar when header is hidden/shown
   const updateStatusBar = (headerHidden: boolean) => {
@@ -100,6 +105,12 @@ const Home = () => {
 
     )
   }
+
+  useEffect(() => {
+    if (settingDataFromAPI?.data && !settingIsLoading) {
+      setSettingData(settingDataFromAPI?.data?.result?.setting)
+    }
+  }, [settingDataFromAPI?.data,settingIsLoading])
 
   useEffect(() => {
     updateUserLocation()

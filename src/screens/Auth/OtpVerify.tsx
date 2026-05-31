@@ -62,8 +62,9 @@ const OtpVerify = () => {
           tokenStorage.set("accessToken", data?.data?.result?.token)
           tokenStorage.set("refreshToken", data?.data?.result?.refreshToken)
 
-          const { setUser } = useAuthStore.getState()
+          const { setUser, user: currentUser } = useAuthStore.getState()
           setUser({
+            ...currentUser, // Preserve existing user data (like address, userLocation, etc.)
             expirationTime: data?.data?.result?.ExpirationTime,
             userUniqueId: data?.data?.result?.userUniqueId,
             userMobile: data?.data?.result?.mobile
@@ -112,7 +113,7 @@ const OtpVerify = () => {
           <Image alt='loginLogo' source={require('@assets/icons/loginLogo.png')} resizeMode='contain' style={{ width: moderateScale(90), height: moderateScale(90) }} />
           <CustomText variant='h3' style={{ textAlign: 'center', width: moderateScale(250) }} fontFamily={Fonts.SemiBold} numberOfLine={2} >Please verify your mobile number</CustomText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: moderateScale(10) }}>
-            <CustomText variant='h7' style={{ textAlign: 'center', width: moderateScale(300), color: Colors.grayish }} fontFamily={Fonts.Regular} numberOfLine={2} >Please enter {otp} the 4-digit code sent to your mobile number
+            <CustomText variant='h7' style={{ textAlign: 'center', width: moderateScale(300), color: Colors.grayish }} fontFamily={Fonts.Regular} numberOfLine={2} >Please enter the 4-digit code sent to your mobile number
               <CustomText variant='h7' style={{ textAlign: 'center', color: Colors.black }} fontFamily={Fonts.SemiBold} numberOfLine={2} > +91 {mobile}</CustomText>
             </CustomText>
             <Pressable style={{ alignSelf: 'flex-end', marginBottom: moderateScaleVertical(6) }}>

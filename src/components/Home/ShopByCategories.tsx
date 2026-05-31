@@ -47,7 +47,7 @@ const ShopByCategories : FC <ShopByCategoriesProps> = ({data}) => {
             {!!item?.image ? (
               <Image
                 alt="category"
-                source={{ uri: `${settingData?.s3Url}${item?.image}` }}
+                source={{ uri: `${settingData?.s3Url || BaseIMGURL}${item?.image}` }}
                 style={styles.image}
                 resizeMode="contain"
               />

@@ -31,8 +31,7 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
   <string>Your location is used to show the delivery progress on the map</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

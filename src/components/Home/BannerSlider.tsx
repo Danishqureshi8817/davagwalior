@@ -29,7 +29,7 @@ const BannerSlider: FC<BannerSliderProps> = ({ data }) => {
           (data ?? []).map((item) => (
             <View key={item.id} style={{ width: '95%', height: '80%',alignSelf:'center',borderRadius:moderateScale(15),overflow:'hidden' }}>
               <Image
-                source={{ uri: `${settingData?.s3Url}${item?.img}` }}
+                source={{ uri: `${settingData?.s3Url || BaseIMGURL}${item?.img}` }}
                 style={{ width: '100%', height: '100%' }} // Adjust style as needed
                 resizeMode='cover'
               />

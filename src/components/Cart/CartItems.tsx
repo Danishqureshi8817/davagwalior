@@ -11,6 +11,7 @@ import { moderateScale, moderateScaleVertical } from "@utils/responsiveSize";
 import CustomText from "@components/global/CustomText";
 import { DeleteCartItemIcon, MinusIcon, PlusIcon } from "@components/Icons";
 import { useAuthStore } from "@state/authStore";
+import { BaseIMGURL } from "@services/config";
 
 interface CartItemsProps {}
 
@@ -31,7 +32,7 @@ const CartItems: FC<CartItemsProps> = ({}) => {
             <View style={styles.leftRow}>
               <View style={styles.imageWrapper}>
                 <Image
-                  source={{uri: `${settingData?.s3Url}${item?.item?.thumbnail}`}}
+                  source={{uri: `${settingData?.s3Url || BaseIMGURL}${item?.item?.thumbnail}`}}
                   style={styles.image}
                   resizeMode="contain"
                 />

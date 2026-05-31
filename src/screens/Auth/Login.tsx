@@ -39,7 +39,7 @@ const Login = () => {
       }).start()
     } else {
       Animated.timing(animatedValue, {
-        toValue: -keyboardOffsetHeight * 0.84,
+        toValue: -keyboardOffsetHeight * 0.5,
         duration: 1000,
         useNativeDriver: false
       }).start()
@@ -64,7 +64,7 @@ const Login = () => {
     useUserLoginMutation.mutate(payload, {
       onSuccess: (data) => {
         if (data?.data?.success) {
-          showToast(`${data?.data?.message}${data?.data?.result?.otp}`, 'success');
+          showToast(`${data?.data?.message}`, 'success');
           console.log(data?.data?.result);
           navigate(RoutesName?.OtpVerify, { mobile, otp: data?.data?.result?.otp })
         } else {

@@ -359,7 +359,7 @@ const Cart = () => {
                   Delivering to
                 </CustomText>
                 <CustomText variant='h9' numberOfLine={2} style={{ opacity: 0.6 }} >
-                  {!!user?.saveAddressLocal?.Address ? user?.saveAddressLocal?.Address : user?.userLocation?.address || 'Please select address'}
+                  {!!user?.saveAddressLocal?.Address ? `${user?.saveAddressLocal?.Address}, ${user?.saveAddressLocal?.cityName}, ${user?.saveAddressLocal?.pincode}` : user?.userLocation?.address || 'Please select address'}
                 </CustomText>
               </View>
             </View>

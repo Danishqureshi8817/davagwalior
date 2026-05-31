@@ -9,6 +9,7 @@ import { FC } from "react"
 import { useAuthStore } from "@state/authStore"
 import { calculateDiscount } from "@utils/helperFunctions"
 import { navigate } from "@utils/NavigationUtils"
+import { BaseIMGURL } from "@services/config"
 
 interface ProductsSliderProps {
   sliderBgType?: string;
@@ -47,7 +48,7 @@ const ProductsSlider:FC <ProductsSliderProps> = ({productData, sliderBgType}) =>
         <View style={styles.imageContainer}>
           {item?.thumbnail ? (
             <Image 
-              source={{ uri: `${settingData?.s3Url}${item?.thumbnail}` }} 
+              source={{ uri: `${settingData?.s3Url || BaseIMGURL}${item?.thumbnail}` }} 
               style={styles.productImage} 
               resizeMode="contain" 
             />

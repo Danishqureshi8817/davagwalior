@@ -16,6 +16,7 @@ import Carousel from 'pinar'
 import { useAuthStore } from '@state/authStore'
 import { navigate } from '@utils/NavigationUtils'
 import useGetProductDetails from '@hooks/product/get-product-details'
+import { BaseIMGURL } from '@services/config'
 
 const ProductDetails = () => {
   // init
@@ -86,10 +87,10 @@ const ProductDetails = () => {
   // Get images from gallery if available, otherwise use thumbnail
   const getImages = () => {
     if (product?.gallery && product.gallery.length > 0) {
-      return product.gallery.map((img: string) => `${settingData?.s3Url}${img}`)
+      return product.gallery.map((img: string) => `${settingData?.s3Url || BaseIMGURL}${img}`)
     }
     if (product?.thumbnail) {
-      return [`${settingData?.s3Url}${product.thumbnail}`]
+      return [`${settingData?.s3Url || BaseIMGURL}${product.thumbnail}`]
     }
     return []
   }

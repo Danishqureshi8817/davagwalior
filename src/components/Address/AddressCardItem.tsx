@@ -6,7 +6,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import CustomText from '@components/global/CustomText';
 import { useAuthStore } from '@state/authStore';
-import { navigate } from '@utils/NavigationUtils';
+import { navigate, goBack } from '@utils/NavigationUtils';
+import PrimaryButton from '@components/ui/PrimaryButton';
 
 interface ADDRESS_CARD_TYPE {
   id: number;
@@ -69,6 +70,12 @@ const AddressCardItem : FC<AddressCardItemProps> = ({ item, onDeleteAddress }) =
           </Pressable>
         </View>
       </View>
+
+      {user?.saveAddressLocal?.id === item?.id && <PrimaryButton
+        buttonText='Deliver to this address'
+        onPress={() => goBack()}
+        marginTop={moderateScaleVertical(10)}
+      />}
     </Pressable>
   )
 }

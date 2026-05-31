@@ -7,7 +7,7 @@ import { moderateScale, moderateScaleVertical } from '@utils/responsiveSize';
 import LottieView from 'lottie-react-native'
 import { screenWidth } from '@utils/Scaling';
 import { useEffect } from 'react';
-import { replace } from '@utils/NavigationUtils';
+import { navigate, replace } from '@utils/NavigationUtils';
 
 const OrderSuccess = () => {
 
@@ -42,6 +42,7 @@ const OrderSuccess = () => {
           width={moderateScale(320)}
           borderRadius={moderateScale(10)}
           marginTop={moderateScaleVertical(25)}
+          // onPress={() => navigate(RoutesName.Orders)}
         />
       </View>
     </Container>

@@ -88,8 +88,8 @@ android {
         applicationId "com.davagwalior"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.8"
+        versionCode 12
+        versionName "1.12"
     }
     signingConfigs {
         debug {

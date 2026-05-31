@@ -10,7 +10,6 @@ import { jwtDecode } from 'jwt-decode'
 import { tokenStorage } from '@state/storage';
 import { useToast } from '@masumdev/rn-toast';
 import { isLocationEnabled, promptForEnableLocationIfNeeded } from 'react-native-android-location-enabler';
-import useGetSettings from '@hooks/auth/get-settings';
 import useRefreshToken from '@hooks/auth/refresh-token';
 
 GeoLocation.setRNConfiguration({
@@ -30,7 +29,6 @@ const Splash = () => {
   const { showToast } = useToast();
 
   // api
-  const useGetSettingsQuery = useGetSettings()
   const refreshTokenMutation = useRefreshToken()
 
   const tokenCheck = async () => {
@@ -64,8 +62,9 @@ const Splash = () => {
 
                 // Update user data if available
                 if (data?.data?.result?.user) {
-                  const { setUser } = useAuthStore.getState()
+                  const { setUser, user: currentUser } = useAuthStore.getState()
                   setUser({
+                    ...currentUser, // Preserve existing user data (like address, userLocation, etc.)
                     expirationTime: data?.data?.result?.expirationTime,
                     userUniqueId: data?.data?.result?.user?.userUniqueId,
                     userMobile: data?.data?.result?.user?.mobile
@@ -106,13 +105,6 @@ const Splash = () => {
       await promptForEnableLocationIfNeeded();
     }
   };
-
-  useEffect(() => {
-    if (useGetSettingsQuery?.data?.data?.success) {
-      const { setSettingData } = useAuthStore.getState()
-      setSettingData(useGetSettingsQuery?.data?.data?.result?.setting)
-    }
-  }, [useGetSettingsQuery?.data])
 
   useEffect(() => {
     const initialStart = () => {

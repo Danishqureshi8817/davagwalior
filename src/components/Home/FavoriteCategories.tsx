@@ -39,7 +39,7 @@ const FavoriteCategories: FC<FavoriteCategoriesProps> = ({ data }) => {
     >
       <View style={[styles.itemImgContainer, shadowStyle]}>
         <Image
-          source={{ uri: `${settingData?.s3Url}${item.image}` }}
+          source={{ uri: `${settingData?.s3Url || BaseIMGURL}${item.image}` }}
           style={styles.itemImg}
           resizeMode="contain"
         />
